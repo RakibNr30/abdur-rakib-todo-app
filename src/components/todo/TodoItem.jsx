@@ -11,17 +11,17 @@ const TodoItem = ({todo, serial}) => {
     const [showFormModal, setShowFormModal] = useState(false);
     const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
 
-    const todos = getAllTodoFromStore();
+    let todos = getAllTodoFromStore();
 
     const handleUpdate = (todo) => {
-        const updatedTodos = todos.map((item) => {
+        todos = todos.map((item) => {
             if (item.id === todo.id) {
                 item = todo;
             }
             return item;
         });
 
-        addAllTodoToStore(updatedTodos);
+        addAllTodoToStore(todos);
     }
 
     return (

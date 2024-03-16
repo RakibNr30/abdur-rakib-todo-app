@@ -1,24 +1,34 @@
 import FrontLayout from "../../layouts/FrontLayout";
 import {ButtonGroup, Table} from "react-bootstrap";
-import {todos} from "../../data/mock";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEye, faPencil, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import TodoStatus from "../../constants/TodoStatus";
 import useTodoStore from "../../stores/todoStore";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {getAllTodo} from "../../repository/todoRepository";
 import TodoPriority from "../../constants/TodoPriority";
+import DefaultModal from "../../components/DefaultModal";
 
 export default () => {
 
     const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+    const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
+    const [todoId, setTodoId] = useState();
 
     useEffect(() => {
         addAllTodoToStore(getAllTodo())
     }, []);
 
-    const todos = getAllTodoFromStore();
+    let todos = getAllTodoFromStore();
+
+    const handleDelete = (id) => {
+        todos = todos.filter((item) => {
+            return item.id !== id;
+        });
+
+        addAllTodoToStore(todos);
+    }
 
     return (
         <FrontLayout>
@@ -52,13 +62,32 @@ export default () => {
                                         <Button variant="outline-secondary">
                                             <FontAwesomeIcon icon={faEye}/>
                                         </Button>
-                                        <Button variant="outline-primary">
-                                            <FontAwesomeIcon icon={faPencil}/>
-                                        </Button>
-                                        <Button variant="outline-danger">
+                                        <Button variant="outline-danger" onClick={() => {
+                                            setShowDeleteItemModal(true);
+                                            setTodoId(todo.id);
+                                        }}>
                                             <FontAwesomeIcon icon={faTrash}/>
                                         </Button>
                                     </ButtonGroup>
+
+                                    <DefaultModal
+                                        title="Delete Todo"
+                                        show={showDeleteItemModal}
+                                        handleClose={() => {
+                                            setShowDeleteItemModal(false)
+                                        }}>
+                                        <div>
+                                            Are you sure want to delete this item?
+                                        </div>
+                                        <div>
+                                            <Button variant="danger" className="mt-3 float-end" onClick={() => {
+                                                handleDelete(todoId);
+                                                setShowDeleteItemModal(false)
+                                            }}>
+                                                Yes
+                                            </Button>
+                                        </div>
+                                    </DefaultModal>
                                 </td>
                             </tr>
                         )

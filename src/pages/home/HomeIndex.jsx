@@ -2,7 +2,7 @@ import FrontLayout from "../../layouts/FrontLayout";
 import {Card, Col, Row} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlusSquare} from "@fortawesome/free-solid-svg-icons";
+import {faPlusSquare, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
@@ -36,7 +36,7 @@ const HomeIndex = () => {
             <>
                 <Row>
                     <Col md={12} className="mb-5">
-                        <Button variant="outline-danger" onClick={() => setShowClearAllModal(true)}>Clear All</Button>
+                        <Button variant="outline-danger" onClick={() => setShowClearAllModal(true)}><FontAwesomeIcon icon={faTimes} /> Clear All</Button>
                     </Col>
 
                     {todos.map((todo, index) => {
@@ -71,7 +71,7 @@ const HomeIndex = () => {
                     }}>
 
                     <TodoForm
-                        defaultTodo={Todo}
+                        defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
                         handle={handleAdd}
@@ -96,7 +96,6 @@ const HomeIndex = () => {
                         </Button>
                     </div>
                 </DefaultModal>
-
             </>
         </FrontLayout>
     );

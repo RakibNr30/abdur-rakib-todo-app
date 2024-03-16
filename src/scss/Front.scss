@@ -63,6 +63,12 @@
   cursor: pointer;
 }
 
+table {
+  th, td {
+    white-space: nowrap;
+  }
+}
+
 $colors: (
         primary: rgba(13, 110, 253, 1),
         secondary: rgba(108, 117, 125, 1),
