@@ -15,7 +15,7 @@ const useTodoStore = create((set, get) => ({
         return {
             todos: todolist
         }
-    })
+    }),
 }));
 
 export default useTodoStore;

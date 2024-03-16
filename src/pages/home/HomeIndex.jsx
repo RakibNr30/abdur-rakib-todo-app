@@ -4,14 +4,18 @@ import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusSquare} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
-import FormModal from "../../components/FormModal";
-import TodoAdd from "../todo/TodoAdd";
+import DefaultModal from "../../components/DefaultModal";
+import TodoForm from "../todo/TodoForm";
 import useTodoStore from "../../stores/todoStore";
 import {getAllTodo} from "../../repository/todoRepository";
+import Button from "react-bootstrap/Button";
+import Todo from "../../models/Todo";
 
 const HomeIndex = () => {
 
-    const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+    const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+    const [showFormModal, setShowFormModal] = useState(false);
+    const [showClearAllModal, setShowClearAllModal] = useState(false);
 
     useEffect(() => {
         addAllTodoToStore(getAllTodo())
@@ -19,16 +23,29 @@ const HomeIndex = () => {
 
     const todos = getAllTodoFromStore();
 
-    const [showFormModal, setShowFormModal] = useState(false);
+    const handleAdd = (todo) => {
+        addTodoToStore(todo);
+    }
+
+    const handleClear = () => {
+        addAllTodoToStore([]);
+    }
 
     return (
         <FrontLayout>
             <>
                 <Row>
+                    <Col md={12} className="mb-5">
+                        <Button variant="outline-danger" onClick={() => setShowClearAllModal(true)}>Clear All</Button>
+                    </Col>
+
                     {todos.map((todo, index) => {
                         return (
                             <Col md={6} className="mb-3" key={index}>
-                                <TodoItem todo={todo} serial={index + 1}/>
+                                <TodoItem
+                                    todo={todo}
+                                    serial={index + 1}
+                                />
                             </Col>
                         )
                     })}
@@ -46,15 +63,39 @@ const HomeIndex = () => {
                     </Col>
                 </Row>
 
-                <FormModal
+                <DefaultModal
                     title="Add Todo"
                     show={showFormModal}
                     handleClose={() => {
                         setShowFormModal(false)
                     }}>
 
-                    <TodoAdd/>
-                </FormModal>
+                    <TodoForm
+                        defaultTodo={Todo}
+                        buttonLabel="Add"
+                        setShowFormModal={setShowFormModal}
+                        handle={handleAdd}
+                    />
+                </DefaultModal>
+
+                <DefaultModal
+                    title="Clear All Todo"
+                    show={showClearAllModal}
+                    handleClose={() => {
+                        setShowClearAllModal(false)
+                    }}>
+                    <div>
+                        Are you sure want to clear all todos?
+                    </div>
+                    <div>
+                        <Button variant="danger" className="mt-3 float-end" onClick={() => {
+                            handleClear();
+                            setShowClearAllModal(false)
+                        }}>
+                            Yes
+                        </Button>
+                    </div>
+                </DefaultModal>
 
             </>
         </FrontLayout>

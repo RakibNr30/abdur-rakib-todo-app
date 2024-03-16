@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 
-const FormModal = ({title, show, handleClose, children}) => {
+const DefaultModal = ({title, show, handleClose, children}) => {
     return (
         <>
             <Modal show={show} onHide={handleClose}>
@@ -15,4 +15,4 @@ const FormModal = ({title, show, handleClose, children}) => {
     );
 }
 
-export default FormModal;
+export default DefaultModal;

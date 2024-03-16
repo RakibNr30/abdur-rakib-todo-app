@@ -8,11 +8,9 @@ import {uid} from "uid"
 import InputField from "../../components/form/InputField";
 import TextareaField from "../../components/form/TextareaField";
 import SelectField from "../../components/form/SelectField";
-import useTodoStore from "../../stores/todoStore";
 
-const TodoAdd = () => {
+const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUpdated = false}) => {
 
-    const {addTodoToStore} = useTodoStore();
     const [todo, setTodo] = useState({});
     const [resetCounter, setResetCounter] = useState(0);
 
@@ -21,16 +19,7 @@ const TodoAdd = () => {
     }, []);
 
     const reset = () => {
-        setTodo({
-            id: uid(),
-            title: "",
-            details: "",
-            priority: 1,
-            status: 1,
-            end_time: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        });
+        setTodo(defaultTodo);
         setResetCounter(resetCounter + 1);
     }
 
@@ -56,29 +45,26 @@ const TodoAdd = () => {
         }
     }
 
-    const handleSubmit = (e) => {
-        addTodoToStore(todo);
-        reset();
-    }
-
     return (
         <Form>
             <InputField
                 fieldName="title"
                 fieldLabel="Title"
+                defaultValue={todo.title}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
             <TextareaField
                 fieldName="details"
                 fieldLabel="Details"
+                defaultValue={todo.details}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
             <SelectField
                 fieldName="priority"
                 fieldLabel="Priority"
                 options={TodoPriority.getAll()}
-                handler={onChangeHandler}
                 defaultValue={todo.priority}
+                handler={onChangeHandler}
                 resetCounter={resetCounter}/>
             <SelectField
                 fieldName="status"
@@ -91,6 +77,7 @@ const TodoAdd = () => {
                 fieldName="end_time"
                 fieldLabel="End Time"
                 fieldType="datetime-local"
+                defaultValue={todo.end_time}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
 
@@ -98,12 +85,18 @@ const TodoAdd = () => {
                 <Button variant="secondary" onClick={reset}>
                     Clear
                 </Button>
-                <Button variant="primary" className="ms-2" onClick={handleSubmit}>
-                    Add
+                <Button variant="primary" className="ms-2" onClick={() => {
+                    handle(todo);
+                    if (!isUpdated) {
+                        reset();
+                        setShowFormModal(false);
+                    }
+                }}>
+                    {buttonLabel}
                 </Button>
             </FormGroup>
         </Form>
     )
 }
 
-export default TodoAdd;
+export default TodoForm;
