@@ -1,30 +1,35 @@
 export default {
-    pending: 1,
-    inProgress: 2,
-    completed: 3,
-    failed: 4,
+    lowest: 1,
+    low: 2,
+    medium: 3,
+    high: 4,
+    critical: 5,
     getAll: () => {
         return [
-            {value: 1, label: "Pending"},
-            {value: 2, label: "In Progress"},
-            {value: 3, label: "Completed"},
-            {value: 4, label: "Failed"},
+            {value: 1, label: "Lowest"},
+            {value: 2, label: "Low"},
+            {value: 3, label: "Medium"},
+            {value: 4, label: "High"},
+            {value: 5, label: "Critical"}
         ]
     },
     getLabel: (value) => {
-        let label = "Pending";
+        let label = "Medium";
         switch (value) {
             case 1:
-                label = "Pending";
+                label = "Lowest";
                 break;
             case 2:
-                label = "In Progress";
+                label = "Low";
                 break;
             case 3:
-                label = "Completed";
+                label = "Medium";
                 break;
             case 4:
-                label = "Failed";
+                label = "High";
+                break;
+            case 5:
+                label = "Critical";
                 break;
             default:
                 break;
@@ -33,18 +38,21 @@ export default {
         return label;
     },
     getColor: (value) => {
-        let color = "secondary";
+        let color = "info";
         switch (value) {
             case 1:
                 color = "secondary";
                 break;
             case 2:
-                color = "primary";
-                break;
-            case 3:
                 color = "success";
                 break;
+            case 3:
+                color = "info";
+                break;
             case 4:
+                color = "warning";
+                break;
+            case 5:
                 color = "danger";
                 break;
             default:

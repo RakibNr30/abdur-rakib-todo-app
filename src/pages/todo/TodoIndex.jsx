@@ -5,8 +5,21 @@ import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faPencil, faTrash} from "@fortawesome/free-solid-svg-icons";
 import TodoStatus from "../../constants/TodoStatus";
+import useTodoStore from "../../stores/todoStore";
+import {useEffect} from "react";
+import {getAllTodo} from "../../repository/todoRepository";
+import TodoPriority from "../../constants/TodoPriority";
 
 export default () => {
+
+    const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+
+    useEffect(() => {
+        addAllTodoToStore(getAllTodo())
+    }, []);
+
+    const todos = getAllTodoFromStore();
+
   return (
     <FrontLayout>
         <div className="mt-5 mb-5">
@@ -17,7 +30,7 @@ export default () => {
                     <th>Title</th>
                     <th>Priority</th>
                     <th>Status</th>
-                    <th>Due Time</th>
+                    <th>End Time</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Actions</th>
@@ -29,13 +42,13 @@ export default () => {
                         <tr key={index}>
                             <td>{todo.id}</td>
                             <td>{todo.title}</td>
-                            <td>{todo.priority}</td>
-                            <td className={`text-${TodoStatus.getColor(todo.status)}`}>{TodoStatus.getLabel(todo.status)}</td>
-                            <td>{todo.due_time}</td>
+                            <td className={`text-${TodoPriority.getColor(parseInt(todo.priority))}`}>{TodoPriority.getLabel(parseInt(todo.priority))}</td>
+                            <td className={`text-${TodoStatus.getColor(parseInt(todo.status))}`}>{TodoStatus.getLabel(parseInt(todo.status))}</td>
+                            <td>{todo.end_time}</td>
                             <td>{todo.created_at}</td>
                             <td>{todo.updated_at}</td>
                             <td>
-                                <ButtonGroup aria-label="Basic example">
+                                <ButtonGroup>
                                     <Button variant="outline-secondary">
                                         <FontAwesomeIcon icon={faEye} />
                                     </Button>

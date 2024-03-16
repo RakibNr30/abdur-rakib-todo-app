@@ -1,6 +1,6 @@
 import TopBar from "../shared/TopBar";
 import Container from "react-bootstrap/Container";
-import '../Front.css'
+import '../scss/Front.scss'
 
 export default ({ children }) => {
     return (

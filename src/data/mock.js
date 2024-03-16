@@ -1,33 +1,13 @@
 const todos = [
     {
-        "id": "cb8ea7a9-ca92-4805-96b5-504d907231cd",
-        "title": "Vestibulum ac est lacinia nisi venenatis tristique.",
-        "details": "Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.",
-        "priority": 6,
-        "status": 1,
-        "due_time": "2023-10-01T01:10:42Z",
-        "created_at": "2023-11-17T11:17:30Z",
-        "updated_at": "2024-03-06T06:10:40Z"
-    },
-    {
         "id": "3ed97930-69fd-4e58-a420-f1e09ed27886",
         "title": "In quis justo.",
         "details": "In congue. Etiam justo. Etiam pretium iaculis justo.",
         "priority": 10,
         "status": 2,
-        "due_time": "2024-01-05T01:18:33Z",
+        "end_time": "2024-01-05T01:18:33Z",
         "created_at": "2024-03-11T06:37:45Z",
         "updated_at": "2024-03-04T18:21:46Z"
-    },
-    {
-        "id": "266b8279-721e-488f-9fe7-e912a7ce6686",
-        "title": "Nam dui.",
-        "details": "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
-        "priority": 8,
-        "status": 1,
-        "due_time": "2023-07-02T13:03:27Z",
-        "created_at": "2023-11-12T10:23:56Z",
-        "updated_at": "2023-09-02T22:27:44Z"
     },
     {
         "id": "3934e3b9-a78a-48b8-b442-60ba94b351aa",
@@ -35,29 +15,19 @@ const todos = [
         "details": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
         "priority": 4,
         "status": 5,
-        "due_time": "2023-11-06T14:02:00Z",
+        "end_time": "2023-11-06T14:02:00Z",
         "created_at": "2023-10-15T08:24:43Z",
         "updated_at": "2024-02-01T07:32:55Z"
     },
-    {
+    /*{
         "id": "7487283d-f5bb-4091-9302-1eedb7780a3f",
         "title": "Morbi ut odio.",
         "details": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
         "priority": 5,
         "status": 5,
-        "due_time": "2023-04-16T21:26:18Z",
+        "end_time": "2023-04-16T21:26:18Z",
         "created_at": "2023-09-15T10:33:00Z",
         "updated_at": "2023-12-14T15:21:24Z"
-    },
-    {
-        "id": "f270c7a4-8032-4615-b91f-58dbd8228441",
-        "title": "Nulla ut erat id mauris vulputate elementum.",
-        "details": "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
-        "priority": 3,
-        "status": 1,
-        "due_time": "2023-05-20T04:30:40Z",
-        "created_at": "2023-09-06T17:09:24Z",
-        "updated_at": "2023-06-19T21:57:38Z"
     },
     {
         "id": "44127b98-e0d1-4e8a-9734-5b386533596a",
@@ -65,29 +35,9 @@ const todos = [
         "details": "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.",
         "priority": 7,
         "status": 2,
-        "due_time": "2023-07-18T17:21:37Z",
+        "end_time": "2023-07-18T17:21:37Z",
         "created_at": "2024-02-21T13:38:26Z",
         "updated_at": "2023-09-12T05:21:58Z"
-    },
-    {
-        "id": "a23312ff-010e-455d-897f-d69c847b1005",
-        "title": "Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.",
-        "details": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
-        "priority": 6,
-        "status": 1,
-        "due_time": "2024-01-15T07:53:19Z",
-        "created_at": "2024-01-27T01:41:13Z",
-        "updated_at": "2023-05-12T20:06:11Z"
-    },
-    {
-        "id": "454c54c4-a8ef-42b3-84e3-303d000f8687",
-        "title": "Quisque porta volutpat erat.",
-        "details": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
-        "priority": 4,
-        "status": 1,
-        "due_time": "2023-04-13T20:31:41Z",
-        "created_at": "2023-03-15T22:11:35Z",
-        "updated_at": "2024-01-06T03:06:02Z"
     },
     {
         "id": "f03f097f-b174-4af0-b60d-f4c80092ab14",
@@ -95,7 +45,7 @@ const todos = [
         "details": "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
         "priority": 2,
         "status": 4,
-        "due_time": "2023-11-12T19:27:05Z",
+        "end_time": "2023-11-12T19:27:05Z",
         "created_at": "2023-12-23T23:37:13Z",
         "updated_at": "2023-12-04T20:57:55Z"
     },
@@ -105,7 +55,7 @@ const todos = [
         "details": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
         "priority": 2,
         "status": 4,
-        "due_time": "2023-05-28T07:04:24Z",
+        "end_time": "2023-05-28T07:04:24Z",
         "created_at": "2024-01-13T10:53:47Z",
         "updated_at": "2023-08-05T01:17:57Z"
     },
@@ -115,7 +65,7 @@ const todos = [
         "details": "Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.",
         "priority": 8,
         "status": 5,
-        "due_time": "2023-07-20T22:42:29Z",
+        "end_time": "2023-07-20T22:42:29Z",
         "created_at": "2023-05-30T08:54:56Z",
         "updated_at": "2024-01-04T08:32:02Z"
     },
@@ -125,29 +75,9 @@ const todos = [
         "details": "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.",
         "priority": 2,
         "status": 1,
-        "due_time": "2023-12-13T13:19:43Z",
+        "end_time": "2023-12-13T13:19:43Z",
         "created_at": "2023-05-26T02:18:05Z",
         "updated_at": "2023-07-02T20:43:46Z"
-    },
-    {
-        "id": "d4a20851-a620-41ff-bba0-8778de0b6582",
-        "title": "Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
-        "details": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.",
-        "priority": 3,
-        "status": 1,
-        "due_time": "2024-01-25T21:49:33Z",
-        "created_at": "2023-08-12T19:21:38Z",
-        "updated_at": "2023-12-01T08:14:30Z"
-    },
-    {
-        "id": "3aa66861-e7f5-46f8-a6a9-bc34219dd54f",
-        "title": "In blandit ultrices enim.",
-        "details": "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
-        "priority": 3,
-        "status": 1,
-        "due_time": "2023-09-28T20:24:33Z",
-        "created_at": "2023-10-13T10:52:00Z",
-        "updated_at": "2023-12-12T05:24:58Z"
     },
     {
         "id": "0204a076-f51f-45d5-8969-b4b8b948af02",
@@ -155,7 +85,7 @@ const todos = [
         "details": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
         "priority": 1,
         "status": 3,
-        "due_time": "2023-12-30T08:28:58Z",
+        "end_time": "2023-12-30T08:28:58Z",
         "created_at": "2023-07-23T23:10:55Z",
         "updated_at": "2023-05-16T19:57:31Z"
     },
@@ -165,7 +95,7 @@ const todos = [
         "details": "In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
         "priority": 1,
         "status": 3,
-        "due_time": "2023-03-24T16:09:28Z",
+        "end_time": "2023-03-24T16:09:28Z",
         "created_at": "2024-02-26T13:57:23Z",
         "updated_at": "2024-01-06T11:05:16Z"
     },
@@ -175,7 +105,7 @@ const todos = [
         "details": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
         "priority": 8,
         "status": 2,
-        "due_time": "2023-08-27T10:07:06Z",
+        "end_time": "2023-08-27T10:07:06Z",
         "created_at": "2023-07-07T06:30:20Z",
         "updated_at": "2024-02-04T02:23:39Z"
     },
@@ -185,7 +115,7 @@ const todos = [
         "details": "Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
         "priority": 9,
         "status": 5,
-        "due_time": "2023-06-25T01:14:15Z",
+        "end_time": "2023-06-25T01:14:15Z",
         "created_at": "2023-09-13T13:54:17Z",
         "updated_at": "2024-01-04T14:41:01Z"
     },
@@ -195,7 +125,7 @@ const todos = [
         "details": "Phasellus in felis. Donec semper sapien a libero. Nam dui.",
         "priority": 6,
         "status": 2,
-        "due_time": "2023-12-10T22:00:01Z",
+        "end_time": "2023-12-10T22:00:01Z",
         "created_at": "2023-06-16T03:01:08Z",
         "updated_at": "2023-10-24T22:54:41Z"
     },
@@ -205,7 +135,7 @@ const todos = [
         "details": "Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
         "priority": 7,
         "status": 3,
-        "due_time": "2023-11-16T05:21:21Z",
+        "end_time": "2023-11-16T05:21:21Z",
         "created_at": "2024-01-31T06:00:01Z",
         "updated_at": "2024-03-07T11:55:46Z"
     },
@@ -215,7 +145,7 @@ const todos = [
         "details": "Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.",
         "priority": 8,
         "status": 3,
-        "due_time": "2023-10-18T05:15:50Z",
+        "end_time": "2023-10-18T05:15:50Z",
         "created_at": "2023-03-27T03:09:39Z",
         "updated_at": "2024-01-28T09:58:22Z"
     },
@@ -225,7 +155,7 @@ const todos = [
         "details": "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.",
         "priority": 1,
         "status": 1,
-        "due_time": "2024-02-08T13:59:41Z",
+        "end_time": "2024-02-08T13:59:41Z",
         "created_at": "2023-09-04T21:08:29Z",
         "updated_at": "2024-01-22T15:27:31Z"
     },
@@ -235,7 +165,7 @@ const todos = [
         "details": "Sed ante. Vivamus tortor. Duis mattis egestas metus.",
         "priority": 2,
         "status": 4,
-        "due_time": "2023-08-06T15:21:21Z",
+        "end_time": "2023-08-06T15:21:21Z",
         "created_at": "2023-06-07T11:23:56Z",
         "updated_at": "2023-08-07T10:21:04Z"
     },
@@ -245,7 +175,7 @@ const todos = [
         "details": "In congue. Etiam justo. Etiam pretium iaculis justo.",
         "priority": 3,
         "status": 5,
-        "due_time": "2023-05-15T01:34:09Z",
+        "end_time": "2023-05-15T01:34:09Z",
         "created_at": "2023-07-03T00:03:17Z",
         "updated_at": "2023-12-17T14:51:14Z"
     },
@@ -255,10 +185,10 @@ const todos = [
         "details": "In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.",
         "priority": 10,
         "status": 3,
-        "due_time": "2024-02-01T00:40:06Z",
+        "end_time": "2024-02-01T00:40:06Z",
         "created_at": "2023-04-29T01:51:36Z",
         "updated_at": "2023-03-21T21:19:06Z"
-    },
+    },*/
 ];
 
 export {todos}
