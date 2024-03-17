@@ -2,36 +2,13 @@ import {Badge, Card} from "react-bootstrap";
 import TodoStatus from "../../constants/todoStatus";
 import TodoPriority from "../../constants/todoPriority";
 import RemainingTime from "../RemainingTime";
-import {useState} from "react";
-import TodoForm from "../../pages/todo/TodoForm";
-import DefaultModal from "../DefaultModal";
-import useTodoStore from "../../stores/todoStore";
-import DefaultToast from "../DefaultToast";
 
-const TodoItem = ({todo, serial}) => {
-    const [showFormModal, setShowFormModal] = useState(false);
-    const [showToast, setShowToast] = useState(false);
-    const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
-
-    let todos = getAllTodoFromStore();
-
-    const handleUpdate = (todo) => {
-        todos = todos.map((item) => {
-            if (item.id === todo.id) {
-                item = todo;
-            }
-            return item;
-        });
-
-        addAllTodoToStore(todos);
-        setShowToast(true);
-    }
-
+const TodoItem = ({todo, serial, setShow}) => {
     return (
         <>
             <Card
                 className={`shadow-sm border-${TodoStatus.getColor(parseInt(todo.status))}-left-5 min-height-170 cursor-pointer`}
-                onClick={() => setShowFormModal(true)}
+                onClick={setShow}
             >
                 <Card.Body>
                     <div className={`mb-3`}>Todo #{serial}</div>
@@ -46,29 +23,6 @@ const TodoItem = ({todo, serial}) => {
                     </div>
                 </Card.Body>
             </Card>
-
-            <DefaultModal
-                title="Edit Todo"
-                show={showFormModal}
-                handleClose={() => {
-                    setShowFormModal(false)
-                }}>
-
-                <TodoForm
-                    defaultTodo={todo}
-                    buttonLabel="Update"
-                    handle={handleUpdate}
-                    isUpdate={true}
-                />
-            </DefaultModal>
-
-            <DefaultToast
-                show={showToast}
-                setShow={setShowToast}
-                variant={"success"}
-                title="Success!"
-                body="Todo updated successfully."
-            />
         </>
     )
 }

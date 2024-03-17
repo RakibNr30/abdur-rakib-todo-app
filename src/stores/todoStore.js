@@ -28,7 +28,7 @@ const useTodoStore = create((set, get) => ({
                             return value.toLowerCase().includes(query.toLowerCase());
                         } else if (typeof value === "number") {
                             const mappedObject = maps[key];
-                            return mappedObject && mappedObject[value].toLowerCase().includes(query.toLowerCase());
+                            return mappedObject[value] && mappedObject[value].toLowerCase().includes(query.toLowerCase());
                         }
                         return false;
                     }
