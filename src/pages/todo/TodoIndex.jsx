@@ -10,13 +10,28 @@ import {getAllTodo} from "../../repository/todoRepository";
 import TodoPriority from "../../constants/todoPriority";
 import DefaultModal from "../../components/DefaultModal";
 import DefaultToast from "../../components/DefaultToast";
+import {DIRECTION} from "../../constants/sorts";
+import SortDirection from "../../components/SortDirection";
+import {Link} from "react-router-dom";
 
-export default () => {
+const tableHeaders = [
+    { field: 'id', label: 'ID' },
+    { field: 'title', label: 'Title' },
+    { field: 'priority', label: 'Priority' },
+    { field: 'status', label: 'Status' },
+    { field: 'end_time', label: 'End Time' },
+    { field: 'created_at', label: 'Created At' },
+    { field: 'updated_at', label: 'Updated At' }
+];
 
-    const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+const TodoIndex = () => {
+
+    const {addAllTodoToStore, getAllTodoFromStore, sortTodos} = useTodoStore();
     const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
     const [todoId, setTodoId] = useState();
     const [showToast, setShowToast] = useState(false);
+    const [sortField, setSortField] = useState();
+    const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
     useEffect(() => {
         addAllTodoToStore(getAllTodo())
@@ -33,19 +48,32 @@ export default () => {
         setShowToast(true);
     }
 
+    const handleSort = (field) => {
+        const newDirection = field === sortField
+            ? (sortDirection === DIRECTION.ASC ? DIRECTION.DESC : DIRECTION.ASC)
+            : DIRECTION.ASC;
+        setSortField(field);
+        setSortDirection(newDirection);
+        sortTodos(field, newDirection);
+    }
+
     return (
         <FrontLayout>
             <div className="mt-5 mb-5">
                 <Table striped bordered responsive className="w-100">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>End Time</th>
-                        <th>Created At</th>
-                        <th>Updated At</th>
+                        {tableHeaders.map(header => (
+                            <th key={header.field}>
+                                {header.label}
+                                <SortDirection
+                                    onField={header.field}
+                                    field={sortField}
+                                    direction={sortDirection}
+                                    handleSort={() => handleSort(header.field)}
+                                />
+                            </th>
+                        ))}
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -62,7 +90,7 @@ export default () => {
                                 <td>{todo.updated_at}</td>
                                 <td>
                                     <ButtonGroup>
-                                        <Button variant="outline-secondary">
+                                        <Button as={Link} to={`/todo/${todo.id}`} variant="outline-secondary">
                                             <FontAwesomeIcon icon={faEye}/>
                                         </Button>
                                         <Button variant="outline-danger" onClick={() => {
@@ -114,3 +142,5 @@ export default () => {
         </FrontLayout>
     );
 };
+
+export default TodoIndex;

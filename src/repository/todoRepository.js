@@ -5,6 +5,10 @@ const getAllTodo = () => {
     return items ? JSON.parse(items) : [];
 }
 
+const getTodo = (id) => {
+    return getAllTodo().find(todo => todo.id === id);
+};
+
 const saveTodo = (todo = {}) => {
     localStorage.setItem(KEY, JSON.stringify([...getAllTodo(), todo]));
 }
@@ -13,4 +17,4 @@ const saveAllTodo = (todos = []) => {
     localStorage.setItem(KEY, JSON.stringify(todos));
 }
 
-export {getAllTodo, saveTodo, saveAllTodo}
+export {getAllTodo, getTodo, saveTodo, saveAllTodo}

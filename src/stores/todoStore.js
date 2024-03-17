@@ -35,6 +35,17 @@ const useTodoStore = create((set, get) => ({
                 )
             ),
         })),
+    sortTodos: (field, direction) =>
+        set((state) => {
+            const sortedTodos = [...state.todos].sort((a, b) => {
+                const aFieldValue = a[field];
+                const bFieldValue = b[field];
+                if (aFieldValue < bFieldValue) return direction === 'asc' ? -1 : 1;
+                if (aFieldValue > bFieldValue) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            return {todos: sortedTodos};
+        }),
 }));
 
 export default useTodoStore;
