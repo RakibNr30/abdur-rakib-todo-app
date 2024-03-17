@@ -11,17 +11,17 @@ const TextareaField = ({fieldName, fieldLabel = "", rows = 3, defaultValue, hand
     }, [resetCounter]);
 
     return (
-        <Form.Group className="mb-3">
-            <Form.Label>{fieldLabel}</Form.Label>
+        <Form.Floating className="mb-3">
             <Form.Control
-                as="textarea" rows={rows}
+                as="textarea" rows={rows} style={{height: "100px"}}
                 ref={textarea}
                 id={fieldName}
                 name={fieldName}
                 placeholder={`Enter ${fieldLabel.toLowerCase()}`}
                 onChange={handler}
             />
-        </Form.Group>
+            <Form.Label>{fieldLabel}</Form.Label>
+        </Form.Floating>
     )
 }
 

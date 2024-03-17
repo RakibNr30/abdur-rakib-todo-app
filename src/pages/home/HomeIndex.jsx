@@ -10,25 +10,37 @@ import useTodoStore from "../../stores/todoStore";
 import {getAllTodo} from "../../repository/todoRepository";
 import Button from "react-bootstrap/Button";
 import Todo from "../../models/Todo";
+import DefaultToast from "../../components/DefaultToast";
+import Form from "react-bootstrap/Form";
 
 const HomeIndex = () => {
 
-    const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
+    const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore, searchTodos} = useTodoStore();
     const [showFormModal, setShowFormModal] = useState(false);
     const [showClearAllModal, setShowClearAllModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [showClearAllToast, setShowClearAllToast] = useState(false);
 
     useEffect(() => {
         addAllTodoToStore(getAllTodo())
     }, []);
 
-    const todos = getAllTodoFromStore();
+    let todos = getAllTodoFromStore();
 
     const handleAdd = (todo) => {
         addTodoToStore(todo);
+        setShowToast(true);
     }
 
     const handleClear = () => {
         addAllTodoToStore([]);
+        setShowClearAllToast(true);
+    }
+
+    const handleSearch = (e) => {
+        const searchKeyword = e.target.value.trim();
+
+        searchTodos(searchKeyword);
     }
 
     return (
@@ -36,7 +48,22 @@ const HomeIndex = () => {
             <>
                 <Row>
                     <Col md={12} className="mb-5">
-                        <Button variant="outline-danger" onClick={() => setShowClearAllModal(true)}><FontAwesomeIcon icon={faTimes} /> Clear All</Button>
+                        <Button
+                            variant="outline-danger"
+                            onClick={() => setShowClearAllModal(true)}>
+                            <FontAwesomeIcon icon={faTimes} /> Clear All
+                        </Button>
+
+                        <Form.Floating className="w-auto float-end">
+                            <Form.Control
+                                id="search_keyword"
+                                type="text"
+                                placeholder="Search todo"
+                                className="d-auto float-end"
+                                onChange={handleSearch}
+                            />
+                            <label htmlFor="search_keyword">Search todo</label>
+                        </Form.Floating>
                     </Col>
 
                     {todos.map((todo, index) => {
@@ -96,6 +123,22 @@ const HomeIndex = () => {
                         </Button>
                     </div>
                 </DefaultModal>
+
+                <DefaultToast
+                    show={showToast}
+                    setShow={setShowToast}
+                    variant={"success"}
+                    title="Success!"
+                    body="Todo added successfully."
+                />
+
+                <DefaultToast
+                    show={showClearAllToast}
+                    setShow={setShowClearAllToast}
+                    variant={"success"}
+                    title="Success!"
+                    body="Todo list cleared successfully."
+                />
             </>
         </FrontLayout>
     );

@@ -1,14 +1,16 @@
 import {Badge, Card} from "react-bootstrap";
-import TodoStatus from "../../constants/TodoStatus";
-import TodoPriority from "../../constants/TodoPriority";
+import TodoStatus from "../../constants/todoStatus";
+import TodoPriority from "../../constants/todoPriority";
 import RemainingTime from "../RemainingTime";
 import {useState} from "react";
 import TodoForm from "../../pages/todo/TodoForm";
 import DefaultModal from "../DefaultModal";
 import useTodoStore from "../../stores/todoStore";
+import DefaultToast from "../DefaultToast";
 
 const TodoItem = ({todo, serial}) => {
     const [showFormModal, setShowFormModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
     const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
 
     let todos = getAllTodoFromStore();
@@ -22,6 +24,7 @@ const TodoItem = ({todo, serial}) => {
         });
 
         addAllTodoToStore(todos);
+        setShowToast(true);
     }
 
     return (
@@ -55,9 +58,17 @@ const TodoItem = ({todo, serial}) => {
                     defaultTodo={todo}
                     buttonLabel="Update"
                     handle={handleUpdate}
-                    isUpdated={true}
+                    isUpdate={true}
                 />
             </DefaultModal>
+
+            <DefaultToast
+                show={showToast}
+                setShow={setShowToast}
+                variant={"success"}
+                title="Success!"
+                body="Todo updated successfully."
+            />
         </>
     )
 }

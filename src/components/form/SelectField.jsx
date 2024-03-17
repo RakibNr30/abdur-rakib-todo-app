@@ -11,8 +11,7 @@ const SelectField = ({fieldName, fieldLabel = "", options = [], defaultValue, ha
     }, [resetCounter]);
 
     return (
-        <Form.Group className="mb-3">
-            <Form.Label>{fieldLabel}</Form.Label>
+        <Form.Floating className="mb-3">
             <Form.Select
                 ref={select}
                 id={fieldName}
@@ -24,7 +23,8 @@ const SelectField = ({fieldName, fieldLabel = "", options = [], defaultValue, ha
                     return <option value={item.value} key={index}>{item.label}</option>
                 })}
             </Form.Select>
-        </Form.Group>
+            <Form.Label>{fieldLabel}</Form.Label>
+        </Form.Floating>
     )
 }
 

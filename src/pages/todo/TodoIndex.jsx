@@ -3,18 +3,20 @@ import {ButtonGroup, Table} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
-import TodoStatus from "../../constants/TodoStatus";
+import TodoStatus from "../../constants/todoStatus";
 import useTodoStore from "../../stores/todoStore";
 import {useEffect, useState} from "react";
 import {getAllTodo} from "../../repository/todoRepository";
-import TodoPriority from "../../constants/TodoPriority";
+import TodoPriority from "../../constants/todoPriority";
 import DefaultModal from "../../components/DefaultModal";
+import DefaultToast from "../../components/DefaultToast";
 
 export default () => {
 
     const {addAllTodoToStore, getAllTodoFromStore} = useTodoStore();
     const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
     const [todoId, setTodoId] = useState();
+    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         addAllTodoToStore(getAllTodo())
@@ -28,6 +30,7 @@ export default () => {
         });
 
         addAllTodoToStore(todos);
+        setShowToast(true);
     }
 
     return (
@@ -100,6 +103,14 @@ export default () => {
                     </tbody>
                 </Table>
             </div>
+
+            <DefaultToast
+                show={showToast}
+                setShow={setShowToast}
+                variant={"success"}
+                title="Success!"
+                body="Todo deleted successfully."
+            />
         </FrontLayout>
     );
 };

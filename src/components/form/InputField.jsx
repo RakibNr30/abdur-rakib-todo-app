@@ -11,8 +11,7 @@ const InputField = ({fieldName, fieldLabel = "", fieldType = "text", defaultValu
     }, [resetCounter]);
 
     return (
-        <Form.Group className="mb-3">
-            <Form.Label>{fieldLabel}</Form.Label>
+        <Form.Floating className="mb-3">
             <Form.Control
                 ref={input}
                 id={fieldName}
@@ -21,7 +20,8 @@ const InputField = ({fieldName, fieldLabel = "", fieldType = "text", defaultValu
                 placeholder={`Enter ${fieldLabel.toLowerCase()}`}
                 onChange={handler}
             />
-        </Form.Group>
+            <Form.Label>{fieldLabel}</Form.Label>
+        </Form.Floating>
     )
 }
 

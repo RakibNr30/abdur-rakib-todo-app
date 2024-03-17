@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
-import TodoPriority from "../../constants/TodoPriority";
-import TodoStatus from "../../constants/TodoStatus";
+import TodoPriority from "../../constants/todoPriority";
+import TodoStatus from "../../constants/todoStatus";
 import Button from "react-bootstrap/Button";
 import {FormGroup} from "react-bootstrap";
 import {useEffect, useState} from "react";
@@ -9,7 +9,7 @@ import InputField from "../../components/form/InputField";
 import TextareaField from "../../components/form/TextareaField";
 import SelectField from "../../components/form/SelectField";
 
-const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUpdated = false}) => {
+const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUpdate = false}) => {
 
     const [todo, setTodo] = useState({});
     const [resetCounter, setResetCounter] = useState(0);
@@ -32,10 +32,10 @@ const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUp
                 setTodo({...todo, details: e.target.value})
                 break;
             case "priority":
-                setTodo({...todo, priority: e.target.value})
+                setTodo({...todo, priority: parseInt(e.target.value)})
                 break;
             case "status":
-                setTodo({...todo, status: e.target.value})
+                setTodo({...todo, status: parseInt(e.target.value)})
                 break;
             case "end_time":
                 setTodo({...todo, end_time: e.target.value})
@@ -87,7 +87,7 @@ const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUp
                 </Button>
                 <Button variant="primary" className="ms-2" onClick={() => {
                     handle(todo);
-                    if (!isUpdated) {
+                    if (!isUpdate) {
                         reset();
                         setShowFormModal(false);
                     }
