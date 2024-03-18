@@ -1,32 +1,37 @@
 import FrontLayout from "../../layouts/FrontLayout";
-import {ButtonGroup, Table} from "react-bootstrap";
+import {ButtonGroup, Col, Row, Table} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import TodoStatus from "../../constants/todoStatus";
 import useTodoStore from "../../stores/todoStore";
 import {useEffect, useState} from "react";
-import {getAllTodo} from "../../repository/todoRepository";
+import TodoService from "../../services/TodoService";
 import TodoPriority from "../../constants/todoPriority";
 import DefaultModal from "../../components/DefaultModal";
 import DefaultToast from "../../components/DefaultToast";
 import {DIRECTION} from "../../constants/sorts";
 import SortDirection from "../../components/SortDirection";
 import {Link} from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import * as storages from "../../constants/storages";
+import useStorageStore from "../../stores/storageStore";
 
 const tableHeaders = [
-    { field: 'id', label: 'ID' },
-    { field: 'title', label: 'Title' },
-    { field: 'priority', label: 'Priority' },
-    { field: 'status', label: 'Status' },
-    { field: 'end_time', label: 'End Time' },
-    { field: 'created_at', label: 'Created At' },
-    { field: 'updated_at', label: 'Updated At' }
+    {field: 'id', label: 'ID'},
+    {field: 'title', label: 'Title'},
+    {field: 'priority', label: 'Priority'},
+    {field: 'status', label: 'Status'},
+    {field: 'end_time', label: 'End Time'},
+    {field: 'created_at', label: 'Created At'},
+    {field: 'updated_at', label: 'Updated At'}
 ];
 
 const TodoIndex = () => {
+    const todoService = TodoService();
+    const {getStorage} = useStorageStore();
 
-    const {addAllTodoToStore, getAllTodoFromStore, sortTodos} = useTodoStore();
+    const {addAllTodoToStore, getAllTodoFromStore, sortTodos, searchTodos} = useTodoStore();
     const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
     const [todoId, setTodoId] = useState();
     const [showToast, setShowToast] = useState(false);
@@ -34,7 +39,9 @@ const TodoIndex = () => {
     const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
     useEffect(() => {
-        addAllTodoToStore(getAllTodo())
+        if (getStorage() === storages.TYPE.LOCAL) {
+            addAllTodoToStore(todoService.getAllTodo())
+        }
     }, []);
 
     let todos = getAllTodoFromStore();
@@ -57,8 +64,29 @@ const TodoIndex = () => {
         sortTodos(field, newDirection);
     }
 
+    const handleSearch = (e) => {
+        searchTodos(e.target.value.trim());
+    }
+
     return (
         <FrontLayout>
+            <Row>
+                <Col md={6}>
+
+                </Col>
+                <Col md={6}>
+                    <Form.Floating className="mt-sm-2 mt-md-0">
+                        <Form.Control
+                            id="search_keyword"
+                            type="text"
+                            placeholder="Search todo"
+                            onChange={handleSearch}
+                        />
+                        <label htmlFor="search_keyword">Search todo</label>
+                    </Form.Floating>
+                </Col>
+            </Row>
+
             <div className="mt-5 mb-5">
                 <Table striped bordered responsive className="w-100">
                     <thead>

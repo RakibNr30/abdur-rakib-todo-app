@@ -2,7 +2,7 @@ import TopBar from "../shared/TopBar";
 import Container from "react-bootstrap/Container";
 import '../scss/Front.scss'
 
-export default ({ children }) => {
+const FrontLayout = ({ children }) => {
     return (
         <>
             <TopBar />
@@ -12,3 +12,5 @@ export default ({ children }) => {
         </>
     )
 }
+
+export default FrontLayout;

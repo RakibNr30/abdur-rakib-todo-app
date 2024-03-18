@@ -7,7 +7,7 @@ import {useEffect, useRef, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
 import useTodoStore from "../../stores/todoStore";
-import {getAllTodo} from "../../repository/todoRepository";
+import TodoService from "../../services/TodoService";
 import Button from "react-bootstrap/Button";
 import Todo from "../../models/Todo";
 import DefaultToast from "../../components/DefaultToast";
@@ -15,6 +15,7 @@ import Form from "react-bootstrap/Form";
 import useKeyboardShortcut from "../../hooks/useKeyboardShortcut";
 
 const HomeIndex = () => {
+    const todoService = TodoService();
 
     const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore, searchTodos} = useTodoStore();
     const [existingTodo, setExistingTodo] = useState({});
@@ -29,7 +30,7 @@ const HomeIndex = () => {
     const searchRef = useRef(null);
 
     useEffect(() => {
-        addAllTodoToStore(getAllTodo())
+        addAllTodoToStore(todoService.getAllTodo())
     }, []);
 
     const shortcuts = [
