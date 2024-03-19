@@ -108,3 +108,9 @@ $colors: (
     max-height: #{$i}px;
   }
 }
+
+@media (max-width: 768px) {
+  .search {
+    margin-top: 0.5rem !important;
+  }
+}

@@ -13,9 +13,13 @@ import Todo from "../../models/Todo";
 import DefaultToast from "../../components/DefaultToast";
 import Form from "react-bootstrap/Form";
 import useKeyboardShortcut from "../../hooks/useKeyboardShortcut";
+import useStorageStore from "../../stores/storageStore";
+import * as storages from "../../constants/storages";
 
 const HomeIndex = () => {
-    const todoService = TodoService();
+
+    const {getAllTodo, getTodo, saveTodo, saveAllTodo} = TodoService();
+    const {setStorage, getStorage} = useStorageStore();
 
     const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore, searchTodos} = useTodoStore();
     const [existingTodo, setExistingTodo] = useState({});
@@ -30,13 +34,15 @@ const HomeIndex = () => {
     const searchRef = useRef(null);
 
     useEffect(() => {
-        addAllTodoToStore(todoService.getAllTodo())
+        if (getStorage() === storages.TYPE.LOCAL) {
+            addAllTodoToStore(getAllTodo())
+        }
     }, []);
 
     const shortcuts = [
-        { key: 's', altKey: true, action: () => searchRef.current && searchRef.current.focus() },
-        { key: 'c', altKey: true, action: () => setShowClearAllModal(true) },
-        { key: 'a', altKey: true, action: () => setShowFormModal(true) }
+        {key: 's', altKey: true, action: () => searchRef.current && searchRef.current.focus()},
+        {key: 'c', altKey: true, action: () => setShowClearAllModal(true)},
+        {key: 'a', altKey: true, action: () => setShowFormModal(true)}
     ];
 
     useKeyboardShortcut(shortcuts);
@@ -74,29 +80,33 @@ const HomeIndex = () => {
             <>
                 <Row>
                     <Col md={12} className="mb-5">
-                        <Button
-                            className="me-2"
-                            variant="primary"
-                            onClick={() => setShowKeyboardShortcutModal(true)}>
-                            <FontAwesomeIcon icon={faKeyboard} /> Shortcut
-                        </Button>
-                        <Button
-                            variant="outline-danger"
-                            onClick={() => setShowClearAllModal(true)}>
-                            <FontAwesomeIcon icon={faTimes} /> Clear All
-                        </Button>
-
-                        <Form.Floating className="w-auto float-end">
-                            <Form.Control
-                                ref={searchRef}
-                                id="search_keyword"
-                                type="text"
-                                placeholder="Search todo"
-                                className="d-auto float-end"
-                                onChange={handleSearch}
-                            />
-                            <label htmlFor="search_keyword">Search todo</label>
-                        </Form.Floating>
+                        <Row>
+                            <Col md={6}>
+                                <Button
+                                    className="me-2"
+                                    variant="primary"
+                                    onClick={() => setShowKeyboardShortcutModal(true)}>
+                                    <FontAwesomeIcon icon={faKeyboard}/> Shortcut
+                                </Button>
+                                <Button
+                                    variant="outline-danger"
+                                    onClick={() => setShowClearAllModal(true)}>
+                                    <FontAwesomeIcon icon={faTimes}/> Clear All
+                                </Button>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Floating className="search">
+                                    <Form.Control
+                                        ref={searchRef}
+                                        id="search_keyword"
+                                        type="text"
+                                        placeholder="Search todo"
+                                        onChange={handleSearch}
+                                    />
+                                    <label htmlFor="search_keyword">Search todo</label>
+                                </Form.Floating>
+                            </Col>
+                        </Row>
                     </Col>
 
                     {todos.map((todo, index) => {
