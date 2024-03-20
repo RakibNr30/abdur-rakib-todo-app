@@ -1,14 +1,17 @@
 import TopBar from "../shared/TopBar";
-import Container from "react-bootstrap/Container";
 import '../scss/Front.scss'
+import Sidebar from "../shared/Sidebar";
 
 const FrontLayout = ({ children }) => {
     return (
         <>
             <TopBar />
-            <Container className="container-fluid mt-5 mb-5">
+
+            <Sidebar />
+
+            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4 px-2">
                 {children}
-            </Container>
+            </main>
         </>
     )
 }

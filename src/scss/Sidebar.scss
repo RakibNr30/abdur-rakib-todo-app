@@ -98,3 +98,15 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+}
+.add-todo-btn svg {
+  color: #dc4c3e;
+}
+.add-todo-btn span {
+  color: #dc4c3e;
+  font-weight: 800;
+}
