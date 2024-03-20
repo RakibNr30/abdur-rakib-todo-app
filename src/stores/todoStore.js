@@ -23,6 +23,11 @@ const useTodoStore = create((set, get) => {
                 clonedTodos: todolist,
             }
         }),
+        addAllFilteredTodoToStore: (todolist = []) => set(() => {
+            return {
+                todos: todolist,
+            }
+        }),
         searchTodos: (query) =>
             set((state) => ({
                 todos: state.clonedTodos.filter((todo) =>

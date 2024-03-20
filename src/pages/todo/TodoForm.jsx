@@ -4,7 +4,6 @@ import TodoStatus from "../../constants/todoStatus";
 import Button from "react-bootstrap/Button";
 import {FormGroup} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {uid} from "uid"
 import InputField from "../../components/form/InputField";
 import TextareaField from "../../components/form/TextareaField";
 import SelectField from "../../components/form/SelectField";
@@ -80,7 +79,6 @@ const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUp
                 defaultValue={todo.end_time}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
-
             <FormGroup className="float-end">
                 <Button variant="secondary" onClick={reset}>
                     Clear

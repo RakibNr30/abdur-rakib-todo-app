@@ -1,7 +1,10 @@
 import '../scss/Sidebar.scss'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
+import moment from "moment";
 
 const Sidebar = () => {
+    const path = useLocation().pathname;
+
     return (
         <div className="container-fluid">
             <div className="row">
@@ -31,7 +34,7 @@ const Sidebar = () => {
                                 </button>
                             </li>
                             <li className="nav-item">
-                                <Link to="/app/today" className="nav-link">
+                                <Link to="/app/today" className={`nav-link ${path === "/app/today" ? "active" : ""}`}>
                                     <svg width="24" height="24" viewBox="0 0 24 24">
                                         <g fill="currentColor" fillRule="evenodd">
                                             <path fillRule="nonzero"
@@ -39,7 +42,7 @@ const Sidebar = () => {
                                             <text
                                                 fontFamily="-apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                                                 fontSize="9" transform="translate(4 2)" fontWeight="500">
-                                                <tspan x="8" y="15" textAnchor="middle">{new Date().getDate()}</tspan>
+                                                <tspan x="8" y="15" textAnchor="middle">{moment().date()}</tspan>
                                             </text>
                                         </g>
                                     </svg>
@@ -47,7 +50,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/app/upcomming" className="nav-link">
+                                <Link to="/app/upcoming" className={`nav-link ${path === "/app/upcoming" ? "active" : ""}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                          viewBox="0 0 24 24">
                                         <path fill="currentColor" fillRule="evenodd"
@@ -58,7 +61,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/app/completed" className="nav-link">
+                                <Link to="/app/completed" className={`nav-link ${path === "/app/completed" ? "active" : ""}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                          viewBox="0 0 24 24">
                                         <path fill="currentColor" fillRule="evenodd"
@@ -69,7 +72,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/app/expired" className="nav-link">
+                                <Link to="/app/expired" className={`nav-link ${path === "/app/expired" ? "active" : ""}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                          viewBox="0 0 24 24">
                                         <path fill="currentColor" fillRule="evenodd"

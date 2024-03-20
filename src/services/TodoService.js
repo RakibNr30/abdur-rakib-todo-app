@@ -1,5 +1,6 @@
 import useStorageStore from "../stores/storageStore";
 import * as storages from "../constants/storages";
+import moment from "moment";
 
 const TodoService = () => {
     const KEY = 'todos';
@@ -9,6 +10,20 @@ const TodoService = () => {
         if (storage === storages.TYPE.LOCAL) {
             const items = localStorage.getItem(KEY);
             return items ? JSON.parse(items) : [];
+        } else {
+            return [];
+        }
+    };
+
+    const getAllTodoByDate = (datetime) => {
+        if (storage === storages.TYPE.LOCAL) {
+            const items = localStorage.getItem(KEY);
+
+            return items
+                ? JSON.parse(items).filter((item) => {
+                    return moment(item.end_time).isSame(datetime, "day");
+                })
+                : [];
         } else {
             return [];
         }
@@ -34,7 +49,13 @@ const TodoService = () => {
         }
     };
 
-    return {getAllTodo, getTodo, saveTodo, saveAllTodo};
+    return {
+        getAllTodo,
+        getAllTodoByDate,
+        getTodo,
+        saveTodo,
+        saveAllTodo
+    };
 };
 
 export default TodoService;
