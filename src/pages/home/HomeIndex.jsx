@@ -2,27 +2,20 @@ import FrontLayout from "../../layouts/FrontLayout";
 import {Card, Col, Row, Table} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faKeyboard, faPlusSquare, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faCheckCircle, faKeyboard, faPlusSquare, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useRef, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
-import useTodoStore from "../../stores/todoStore";
-import TodoService from "../../services/TodoService";
 import Button from "react-bootstrap/Button";
 import Todo from "../../models/Todo";
 import DefaultToast from "../../components/DefaultToast";
 import Form from "react-bootstrap/Form";
 import useKeyboardShortcut from "../../hooks/useKeyboardShortcut";
-import useStorageStore from "../../stores/storageStore";
-import * as storages from "../../constants/storages";
+import TodoService from "../../services/TodoService";
 
 const HomeIndex = () => {
+    const todoService = TodoService();
 
-    const {getAllTodo, getTodo, saveTodo, saveAllTodo} = TodoService();
-    const {setStorage, getStorage} = useStorageStore();
-
-    const {addTodoToStore, addAllTodoToStore, getAllTodoFromStore, searchTodos} = useTodoStore();
-    const [existingTodo, setExistingTodo] = useState({});
     const [showFormModal, setShowFormModal] = useState(false);
     const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
     const [showClearAllModal, setShowClearAllModal] = useState(false);
@@ -30,14 +23,10 @@ const HomeIndex = () => {
     const [showToast, setShowToast] = useState(false);
     const [showUpdateToast, setShowUpdateToast] = useState(false);
     const [showClearAllToast, setShowClearAllToast] = useState(false);
+    const [todos, setTodos] = useState([]);
+    const [todo, setTodo] = useState({});
 
     const searchRef = useRef(null);
-
-    useEffect(() => {
-        if (getStorage() === storages.TYPE.LOCAL) {
-            addAllTodoToStore(getAllTodo())
-        }
-    }, []);
 
     const shortcuts = [
         {key: 's', altKey: true, action: () => searchRef.current && searchRef.current.focus()},
@@ -47,40 +36,41 @@ const HomeIndex = () => {
 
     useKeyboardShortcut(shortcuts);
 
-    let todos = getAllTodoFromStore();
+    useEffect(() => {
+        setTodos(todoService.findAll());
+    }, []);
 
     const handleAdd = (todo) => {
-        addTodoToStore(todo);
+        todoService.save(todo);
+        setTodos(todoService.findAll())
         setShowToast(true);
     }
 
     const handleUpdate = (todo) => {
-        todos = todos.map((item) => {
-            if (item.id === todo.id) {
-                item = {...todo, updated_at: new Date().toISOString()};
-            }
-            return item;
-        });
-
-        addAllTodoToStore(todos);
+        todoService.update(todo);
+        setTodos(todoService.findAll())
         setShowUpdateToast(true);
     }
 
     const handleClear = () => {
-        addAllTodoToStore([]);
+        todoService.saveAll([]);
+        setTodos(todoService.findAll())
         setShowClearAllToast(true);
     }
 
     const handleSearch = (e) => {
-        searchTodos(e.target.value.trim());
+        setTodos(todoService.search(e.target.value.trim()));
     }
 
     return (
         <FrontLayout>
             <>
-                <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 className="h2">Todo</h1>
-                    <div className="btn-toolbar mb-2 mb-md-0">
+                <div className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 className="h2">
+                        Todo
+                        <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle}/> {`${todos.length} tasks`}</span>
+                    </h1>
+                    {/*<div className="btn-toolbar mb-2 mb-md-0">
                         <div className="btn-group me-2">
                             <button type="button" className="btn btn-sm btn-outline-secondary">Share</button>
                             <button type="button" className="btn btn-sm btn-outline-secondary">Export</button>
@@ -89,7 +79,7 @@ const HomeIndex = () => {
                             <span data-feather="calendar"></span>
                             This week
                         </button>
-                    </div>
+                    </div>*/}
                 </div>
 
                 <Row>
@@ -123,14 +113,14 @@ const HomeIndex = () => {
                         </Row>
                     </Col>
 
-                    {todos.map((todo, index) => {
+                    {todos.map((item, index) => {
                         return (
                             <Col md={6} className="mb-3" key={index}>
                                 <TodoItem
-                                    todo={todo}
+                                    todo={item}
                                     serial={index + 1}
                                     setShow={() => {
-                                        setExistingTodo(todo)
+                                        setTodo(item)
                                         setShowUpdateFormModal(true);
                                     }}
                                 />
@@ -159,6 +149,7 @@ const HomeIndex = () => {
                     }}>
 
                     <TodoForm
+                        todoFor="upcoming"
                         defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
@@ -174,7 +165,8 @@ const HomeIndex = () => {
                     }}>
 
                     <TodoForm
-                        defaultTodo={existingTodo}
+                        todoFor="upcoming"
+                        defaultTodo={todo}
                         buttonLabel="Update"
                         handle={handleUpdate}
                         isUpdate={true}

@@ -16,7 +16,6 @@ const TopBar = () => {
     const handleSwitchChange = (checked) => {
         setIsChecked(checked);
         setStorage(checked ? storages.TYPE.API : storages.TYPE.LOCAL);
-        window.location.reload();
     };
 
     return (

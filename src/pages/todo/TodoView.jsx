@@ -8,10 +8,11 @@ import {faList} from "@fortawesome/free-solid-svg-icons";
 
 
 const TodoView = () => {
-    const  todoService = TodoService();
+
+    const todoService = TodoService();
 
     const {id} = useParams();
-    const todo = todoService.getTodo(id);
+    const todo = todoService.find(id);
 
     if (!todo) {
         return <Error404 />

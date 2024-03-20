@@ -1,60 +1,73 @@
-import useStorageStore from "../stores/storageStore";
-import * as storages from "../constants/storages";
-import moment from "moment";
+import maps from "../constants/maps";
+import useTodoStore from "../stores/todoStore";
 
 const TodoService = () => {
-    const KEY = 'todos';
-    const storage = useStorageStore.getState().storage;
 
-    const getAllTodo = () => {
-        if (storage === storages.TYPE.LOCAL) {
-            const items = localStorage.getItem(KEY);
-            return items ? JSON.parse(items) : [];
-        } else {
-            return [];
-        }
+    const {getAllTodoFromStore, getAllTodoByDateFromStore, addTodoToStore, addAllTodoToStore, updateTodoToStore, deleteTodoFromStore} = useTodoStore();
+
+    const findAll = () => {
+        return getAllTodoFromStore();
+    }
+
+    const findAllByDate = (date) => {
+        return getAllTodoByDateFromStore(date);
+    }
+
+    const save = (todo = {}) => {
+        addTodoToStore(todo);
+    }
+
+    const saveAll = (todos = []) => {
+        addAllTodoToStore(todos);
+    }
+
+    const find = (id) => {
+        return getAllTodoFromStore().find((todo) => todo.id === id);
+    }
+
+    const update = (todo = {}) => {
+        updateTodoToStore(todo);
+    }
+
+    const destroy = (id) => {
+        deleteTodoFromStore(id);
+    }
+
+    const search = (query = "") => {
+        return getAllTodoFromStore().filter((todo) =>
+            Object.entries(todo).some(([key, value]) => {
+                    if (typeof value === "string") {
+                        return value.toLowerCase().includes(query.toLowerCase());
+                    } else if (typeof value === "number") {
+                        const mappedObject = maps[key];
+                        return mappedObject[value] && mappedObject[value].toLowerCase().includes(query.toLowerCase());
+                    }
+                    return false;
+                }
+            )
+        );
     };
 
-    const getAllTodoByDate = (datetime) => {
-        if (storage === storages.TYPE.LOCAL) {
-            const items = localStorage.getItem(KEY);
-
-            return items
-                ? JSON.parse(items).filter((item) => {
-                    return moment(item.end_time).isSame(datetime, "day");
-                })
-                : [];
-        } else {
-            return [];
-        }
-    };
-
-    const getTodo = (id) => {
-        if (storage === storages.TYPE.LOCAL) {
-            return getAllTodo().find((todo) => todo.id === id);
-        } else {
-            return {};
-        }
-    };
-
-    const saveTodo = (todo = {}) => {
-        if (storage === storages.TYPE.LOCAL) {
-            localStorage.setItem(KEY, JSON.stringify([...getAllTodo(), todo]));
-        }
-    };
-
-    const saveAllTodo = (todos = []) => {
-        if (storage === storages.TYPE.LOCAL) {
-            localStorage.setItem(KEY, JSON.stringify(todos));
-        }
-    };
+    const sort = (field, direction) => {
+        return getAllTodoFromStore().sort((a, b) => {
+            const aFieldValue = a[field];
+            const bFieldValue = b[field];
+            if (aFieldValue < bFieldValue) return direction === 'asc' ? -1 : 1;
+            if (aFieldValue > bFieldValue) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
 
     return {
-        getAllTodo,
-        getAllTodoByDate,
-        getTodo,
-        saveTodo,
-        saveAllTodo
+        findAll,
+        findAllByDate,
+        save,
+        saveAll,
+        update,
+        destroy,
+        find,
+        search,
+        sort
     };
 };
 

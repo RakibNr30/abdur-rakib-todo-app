@@ -1,6 +1,6 @@
 import FrontLayout from "../../layouts/FrontLayout";
 
-const TodoToday = () => {
+const TodoExpired = () => {
     return (
         <FrontLayout>
             <div
@@ -11,4 +11,4 @@ const TodoToday = () => {
     )
 }
 
-export default TodoToday;
+export default TodoExpired;

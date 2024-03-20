@@ -1,76 +1,62 @@
 import FrontLayout from "../../layouts/FrontLayout";
-import {Card, Col, Row, Table} from "react-bootstrap";
+import {Card, Col, Row} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faKeyboard, faPlusSquare, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useRef, useState} from "react";
+import {faCheckCircle, faPlusSquare} from "@fortawesome/free-solid-svg-icons";
+import {useEffect, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
-import useTodoStore from "../../stores/todoStore";
-import TodoService from "../../services/TodoService";
 import Todo from "../../models/Todo";
 import DefaultToast from "../../components/DefaultToast";
-import useStorageStore from "../../stores/storageStore";
-import * as storages from "../../constants/storages";
 import moment from "moment";
-import {FORMAT} from "../../constants/dates";
+import TodoService from "../../services/TodoService";
 
 const TodoToday = () => {
+    const todoService = TodoService();
 
-    const {getAllTodoByDate, getTodo, saveTodo, saveAllTodo} = TodoService();
-    const {setStorage, getStorage} = useStorageStore();
-
-    const {addTodoToStore, addAllTodoToStore, addAllFilteredTodoToStore, getAllTodoFromStore} = useTodoStore();
-    const [existingTodo, setExistingTodo] = useState({});
     const [showFormModal, setShowFormModal] = useState(false);
     const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [showUpdateToast, setShowUpdateToast] = useState(false);
-    const [showClearAllToast, setShowClearAllToast] = useState(false);
+    const [todos, setTodos] = useState([]);
+    const [todo, setTodo] = useState({});
 
     useEffect(() => {
-        if (getStorage() === storages.TYPE.LOCAL) {
-            addAllFilteredTodoToStore(getAllTodoByDate(moment()))
-        }
+        setTodos(todoService.findAllByDate(moment()));
     }, []);
 
-    let todos = getAllTodoFromStore();
 
     const handleAdd = (todo) => {
-        addTodoToStore(todo);
+        todoService.save(todo);
+        setTodos(todoService.findAllByDate(moment()))
         setShowToast(true);
     }
 
     const handleUpdate = (todo) => {
-        todos = todos.map((item) => {
-            if (item.id === todo.id) {
-                item = {...todo, updated_at: moment().format(FORMAT.LOCAL)};
-            }
-            return item;
-        });
-
-        console.log(todos);
-
-        //addAllTodoToStore(todos);
+        todoService.update(todo);
+        setTodos(todoService.findAllByDate(moment()))
         setShowUpdateToast(true);
     }
 
     return (
         <FrontLayout>
             <>
-                <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 className="h2">Today</h1>
+                <div className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 className="h2">
+                        Today
+                        <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle} /> {`${todos.length} tasks`}</span>
+                    </h1>
                 </div>
 
                 <Row>
-                    {todos.map((todo, index) => {
+                {todos.map((item, index) => {
                         return (
                             <Col md={6} className="mb-3" key={index}>
                                 <TodoItem
-                                    todo={todo}
+                                    todo={item}
                                     serial={index + 1}
                                     setShow={() => {
-                                        setExistingTodo(todo)
+                                        setTodo(item)
                                         setShowUpdateFormModal(true);
                                     }}
                                 />
@@ -99,6 +85,7 @@ const TodoToday = () => {
                     }}>
 
                     <TodoForm
+                        todoFor="today"
                         defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
@@ -114,7 +101,8 @@ const TodoToday = () => {
                     }}>
 
                     <TodoForm
-                        defaultTodo={existingTodo}
+                        todoFor="today"
+                        defaultTodo={todo}
                         buttonLabel="Update"
                         handle={handleUpdate}
                         isUpdate={true}

@@ -69,6 +69,15 @@ table {
   }
 }
 
+.breadcrumb {
+  .h2 {
+    span {
+      font-size: 14px;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
 $colors: (
         primary: rgba(13, 110, 253, 1),
         secondary: rgba(108, 117, 125, 1),

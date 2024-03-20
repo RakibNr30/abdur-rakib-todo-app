@@ -7,8 +7,11 @@ import {useEffect, useState} from "react";
 import InputField from "../../components/form/InputField";
 import TextareaField from "../../components/form/TextareaField";
 import SelectField from "../../components/form/SelectField";
+import DateField from "../../components/form/DateField";
+import moment from "moment";
+import {FORMAT} from "../../constants/dates";
 
-const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUpdate = false}) => {
+const TodoForm = ({defaultTodo = {}, todoFor = "upcoming", buttonLabel, setShowFormModal, handle, isUpdate = false}) => {
 
     const [todo, setTodo] = useState({});
     const [resetCounter, setResetCounter] = useState(0);
@@ -20,6 +23,21 @@ const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUp
     const reset = () => {
         setTodo(defaultTodo);
         setResetCounter(resetCounter + 1);
+    }
+
+    let start = null;
+    let end = null;
+
+    switch (todoFor) {
+        case "upcoming":
+            start = moment().format(FORMAT.LOCAL);
+            break;
+        case "today":
+            start = moment().format(FORMAT.LOCAL);
+            end = moment().endOf("day").format(FORMAT.LOCAL);
+            break;
+        default:
+            break;
     }
 
     const onChangeHandler = (e) => {
@@ -72,11 +90,13 @@ const TodoForm = ({defaultTodo = {}, buttonLabel, setShowFormModal, handle, isUp
                 defaultValue={todo.status}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
-            <InputField
+            <DateField
                 fieldName="end_time"
                 fieldLabel="End Time"
                 fieldType="datetime-local"
                 defaultValue={todo.end_time}
+                min={start}
+                max={end}
                 handler={onChangeHandler}
                 resetCounter={resetCounter}/>
             <FormGroup className="float-end">

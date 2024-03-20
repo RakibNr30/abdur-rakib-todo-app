@@ -4,9 +4,7 @@ import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import TodoStatus from "../../constants/todoStatus";
-import useTodoStore from "../../stores/todoStore";
 import {useEffect, useState} from "react";
-import TodoService from "../../services/TodoService";
 import TodoPriority from "../../constants/todoPriority";
 import DefaultModal from "../../components/DefaultModal";
 import DefaultToast from "../../components/DefaultToast";
@@ -14,8 +12,7 @@ import {DIRECTION} from "../../constants/sorts";
 import SortDirection from "../../components/SortDirection";
 import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import * as storages from "../../constants/storages";
-import useStorageStore from "../../stores/storageStore";
+import TodoService from "../../services/TodoService";
 
 const tableHeaders = [
     {field: 'id', label: 'ID'},
@@ -29,29 +26,21 @@ const tableHeaders = [
 
 const TodoIndex = () => {
     const todoService = TodoService();
-    const {getStorage} = useStorageStore();
 
-    const {addAllTodoToStore, getAllTodoFromStore, sortTodos, searchTodos} = useTodoStore();
     const [showDeleteItemModal, setShowDeleteItemModal] = useState(false);
     const [todoId, setTodoId] = useState();
     const [showToast, setShowToast] = useState(false);
     const [sortField, setSortField] = useState();
     const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
+    const [todos, setTodos] = useState([]);
 
     useEffect(() => {
-        if (getStorage() === storages.TYPE.LOCAL) {
-            addAllTodoToStore(todoService.getAllTodo())
-        }
+        setTodos(todoService.findAll());
     }, []);
 
-    let todos = getAllTodoFromStore();
-
     const handleDelete = (id) => {
-        todos = todos.filter((item) => {
-            return item.id !== id;
-        });
-
-        addAllTodoToStore(todos);
+        todoService.destroy(id);
+        setTodos(todoService.findAll());
         setShowToast(true);
     }
 
@@ -61,11 +50,12 @@ const TodoIndex = () => {
             : DIRECTION.ASC;
         setSortField(field);
         setSortDirection(newDirection);
-        sortTodos(field, newDirection);
+
+        setTodos(todoService.sort(field, newDirection));
     }
 
     const handleSearch = (e) => {
-        searchTodos(e.target.value.trim());
+        setTodos(todoService.search(e.target.value.trim()));
     }
 
     return (
