@@ -13,6 +13,7 @@ import DefaultToast from "../../components/DefaultToast";
 import useStorageStore from "../../stores/storageStore";
 import * as storages from "../../constants/storages";
 import moment from "moment";
+import {FORMAT} from "../../constants/dates";
 
 const TodoToday = () => {
 
@@ -43,12 +44,14 @@ const TodoToday = () => {
     const handleUpdate = (todo) => {
         todos = todos.map((item) => {
             if (item.id === todo.id) {
-                item = {...todo, updated_at: new Date().toISOString()};
+                item = {...todo, updated_at: moment().format(FORMAT.LOCAL)};
             }
             return item;
         });
 
-        addAllTodoToStore(todos);
+        console.log(todos);
+
+        //addAllTodoToStore(todos);
         setShowUpdateToast(true);
     }
 
