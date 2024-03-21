@@ -21,9 +21,11 @@
 .bg-primary-light {
   background-color: var(--bs-primary-light);
 }
+
 .bg-secondary-light {
   background-color: var(--bs-secondary-light);
 }
+
 .bg-success-light {
   background-color: var(--bs-success-light);
 }
@@ -51,9 +53,11 @@
 .text-justify {
   text-align: justify !important;
 }
+
 .card.add-new {
   background-color: white !important;
 }
+
 .add-new-card {
   display: flex;
   flex: auto;
@@ -64,9 +68,11 @@
 .item-title.h5 {
   font-size: 0.85rem;
 }
+
 .badge-title {
   font-size: 0.65rem;
 }
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -80,10 +86,35 @@ table {
 .breadcrumb {
   .h2 {
     font-size: 1.5rem;
+
     span {
       font-size: 14px;
       margin-top: 0.25rem;
     }
+  }
+}
+
+.modal-search-options {
+  margin-bottom: 1rem;
+  .option {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+    height: 42px;
+    line-height: 42px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 100%;
+    padding: 0 1rem;
+    border-left: transparent 2px solid;
+  }
+  .option:hover {
+    background-color: #e5e5e5;
+    border-left: #dc4c3e 2px solid;
   }
 }
 
@@ -97,6 +128,18 @@ $colors: (
         light: rgba(248, 249, 250, 1),
         dark: rgba(33, 37, 41, 1)
 );
+.pl-rem-1 {
+  padding-left: 1rem;
+}
+.pr-rem-1 {
+  padding-right: 1rem;
+}
+.ml-rem-1 {
+  margin-left: 1rem;
+}
+.mr-rem-1 {
+  margin-right: 1rem;
+}
 
 @each $name, $color in $colors {
   @for $i from 1 through 10 {
