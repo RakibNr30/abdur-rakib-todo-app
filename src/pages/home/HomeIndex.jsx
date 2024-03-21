@@ -2,7 +2,7 @@ import FrontLayout from "../../layouts/FrontLayout";
 import {Card, Col, Row, Table} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle, faKeyboard, faPlusSquare, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {faCheckCircle, faKeyboard, faCalendarPlus, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useRef, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
@@ -115,7 +115,7 @@ const HomeIndex = () => {
 
                     {todos.map((item, index) => {
                         return (
-                            <Col md={6} className="mb-3" key={index}>
+                            <Col lg={3} md={4} sm={6} className="mb-3" key={index}>
                                 <TodoItem
                                     todo={item}
                                     serial={index + 1}
@@ -128,13 +128,13 @@ const HomeIndex = () => {
                         )
                     })}
 
-                    <Col md={6} className="mb-3">
-                        <Card className={`shadow-sm min-height-170 cursor-pointer bg-dark-subtle`}
+                    <Col lg={3} md={4} sm={6} className="mb-3">
+                        <Card className={`shadow-sm min-height-170 cursor-pointer bg-dark-subtle add-new`}
                               onClick={() => setShowFormModal(true)}
                         >
                             <Card.Body className="add-new-card">
                                 <div className={`font-size-72`}>
-                                    <FontAwesomeIcon icon={faPlusSquare}></FontAwesomeIcon>
+                                    <FontAwesomeIcon icon={faCalendarPlus} className="text-secondary"></FontAwesomeIcon>
                                 </div>
                             </Card.Body>
                         </Card>

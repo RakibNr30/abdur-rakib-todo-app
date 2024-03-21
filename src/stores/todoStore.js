@@ -1,14 +1,10 @@
 import {create} from "zustand";
 import {createJSONStorage, persist} from "zustand/middleware";
-import moment from "moment/moment";
 
 const useTodoStore = create(
     persist((set, get) => ({
             todos: [],
             getAllTodoFromStore: () => get().todos,
-            getAllTodoByDateFromStore: (date) => get().todos.filter((item) => {
-                return moment(item.end_time).isSame(date, "day");
-            }),
             addTodoToStore: (todo = {}) => set((state) => {
                 return {
                     todos: [...state.todos, todo],

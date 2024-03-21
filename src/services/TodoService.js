@@ -1,16 +1,61 @@
 import maps from "../constants/maps";
 import useTodoStore from "../stores/todoStore";
+import moment from "moment";
 
 const TodoService = () => {
 
-    const {getAllTodoFromStore, getAllTodoByDateFromStore, addTodoToStore, addAllTodoToStore, updateTodoToStore, deleteTodoFromStore} = useTodoStore();
+    const {
+        getAllTodoFromStore,
+        addTodoToStore,
+        addAllTodoToStore,
+        updateTodoToStore,
+        deleteTodoFromStore
+    } = useTodoStore();
 
     const findAll = () => {
         return getAllTodoFromStore();
     }
 
-    const findAllByDate = (date) => {
-        return getAllTodoByDateFromStore(date);
+    const findAllByStatus = (status) => {
+        return getAllTodoFromStore().filter((item) => item.status === status);
+    }
+
+    const findAllOverdueByDate = (date) => {
+        return getAllTodoFromStore().filter((item) => {
+            const overdueDate = date.startOf('day');
+            return moment(item.end_time).isSame(overdueDate, 'day') && moment(item.end_time).isBefore(moment());
+        });
+    }
+
+    const findAllOverdueUntilDate = (date) => {
+        return getAllTodoFromStore().filter((item) => {
+            return moment(item.end_time).isBefore(date, 'day');
+        });
+    }
+
+    const findAllByDate = (date, withOverdue = true) => {
+        const now = moment();
+        return getAllTodoFromStore().filter((item) => {
+            return moment(item.end_time).isSame(date, 'day') &&
+                (withOverdue ? true : moment(item.end_time).isAfter(now));
+        });
+    }
+
+    const findAllUpcoming = () => {
+        const now = moment();
+        const groupedTodos = getAllTodoFromStore().reduce((acc, item) => {
+            const endTimeDate = moment(item.end_time).startOf('day');
+            if (moment(item.end_time).isAfter(now)) {
+                acc[endTimeDate] = acc[endTimeDate] || [];
+                acc[endTimeDate].push(item);
+            }
+            return acc;
+        }, {});
+
+        return Object.entries(groupedTodos).map(([date, todos]) => ({
+            date,
+            todos
+        })).sort((a, b) => moment(a.date).diff(moment(b.date)));
     }
 
     const save = (todo = {}) => {
@@ -60,7 +105,11 @@ const TodoService = () => {
 
     return {
         findAll,
+        findAllByStatus,
         findAllByDate,
+        findAllOverdueByDate,
+        findAllOverdueUntilDate,
+        findAllUpcoming,
         save,
         saveAll,
         update,

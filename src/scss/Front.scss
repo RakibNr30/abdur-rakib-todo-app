@@ -51,7 +51,9 @@
 .text-justify {
   text-align: justify !important;
 }
-
+.card.add-new {
+  background-color: white !important;
+}
 .add-new-card {
   display: flex;
   flex: auto;
@@ -59,6 +61,12 @@
   align-self: center;
 }
 
+.item-title.h5 {
+  font-size: 0.85rem;
+}
+.badge-title {
+  font-size: 0.65rem;
+}
 .cursor-pointer {
   cursor: pointer;
 }
@@ -71,6 +79,7 @@ table {
 
 .breadcrumb {
   .h2 {
+    font-size: 1.5rem;
     span {
       font-size: 14px;
       margin-top: 0.25rem;

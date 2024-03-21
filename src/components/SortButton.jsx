@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {DIRECTION} from '../constants/sorts';
 
-const SortDirection = ({onField, field, direction, handleSort}) => {
+const SortButton = ({onField, field, direction, handleSort}) => {
     const isAscending = onField === field && direction === DIRECTION.ASC;
     const isDescending = onField === field && direction === DIRECTION.DESC;
 
@@ -21,4 +21,4 @@ const SortDirection = ({onField, field, direction, handleSort}) => {
     );
 };
 
-export default SortDirection;
+export default SortButton;

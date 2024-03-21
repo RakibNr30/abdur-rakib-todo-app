@@ -9,7 +9,7 @@ import TodoPriority from "../../constants/todoPriority";
 import DefaultModal from "../../components/DefaultModal";
 import DefaultToast from "../../components/DefaultToast";
 import {DIRECTION} from "../../constants/sorts";
-import SortDirection from "../../components/SortDirection";
+import SortButton from "../../components/SortButton";
 import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import TodoService from "../../services/TodoService";
@@ -89,7 +89,7 @@ const TodoIndex = () => {
                         {tableHeaders.map(header => (
                             <th key={header.field}>
                                 {header.label}
-                                <SortDirection
+                                <SortButton
                                     onField={header.field}
                                     field={sortField}
                                     direction={sortDirection}
