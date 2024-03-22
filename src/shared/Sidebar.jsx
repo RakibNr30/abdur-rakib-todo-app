@@ -9,14 +9,11 @@ import DefaultModal from "../components/DefaultModal";
 import DefaultToast from "../components/DefaultToast";
 import SearchModal from "../components/SearchModal";
 import useKeyboardShortcut from "../hooks/useKeyboardShortcut";
-import {useGlobalContext} from "../contexts/GlobalContext";
 
 const Sidebar = ({isCollapsed}) => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
     const todoService = TodoService();
-
-    const { addTodo } = useGlobalContext();
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [showSearchModal, setShowSearchModal] = useState(false);
@@ -35,8 +32,7 @@ const Sidebar = ({isCollapsed}) => {
     useKeyboardShortcut(shortcuts);
 
     const handleAdd = (todo) => {
-        addTodo(todo)
-        //todoService.save(todo);
+        todoService.save(todo);
         setShowToast(true);
     }
 
