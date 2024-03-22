@@ -11,7 +11,7 @@ import DateField from "../../components/form/DateField";
 import moment from "moment";
 import {FORMAT} from "../../constants/dates";
 
-const TodoForm = ({defaultTodo = {}, todoFor = "upcoming", buttonLabel, setShowFormModal, handle, isUpdate = false}) => {
+const TodoForm = ({defaultTodo = {}, todoFor = "upcoming", dueDate={min: moment().format()},  buttonLabel, setShowFormModal, handle, isUpdate = false}) => {
 
     const [todo, setTodo] = useState({});
     const [resetCounter, setResetCounter] = useState(0);
@@ -25,10 +25,10 @@ const TodoForm = ({defaultTodo = {}, todoFor = "upcoming", buttonLabel, setShowF
         setResetCounter(resetCounter + 1);
     }
 
-    let start = null;
-    let end = null;
+    let start = moment(dueDate.min).format(FORMAT.LOCAL);
+    let end = dueDate.max ? moment(dueDate.max).endOf("day").format(FORMAT.LOCAL) : null;
 
-    switch (todoFor) {
+    /*switch (todoFor) {
         case "upcoming":
             start = moment().format(FORMAT.LOCAL);
             break;
@@ -38,7 +38,19 @@ const TodoForm = ({defaultTodo = {}, todoFor = "upcoming", buttonLabel, setShowF
             break;
         default:
             break;
-    }
+    }*/
+
+    /*switch (todoFor) {
+        case "upcoming":
+            start = moment().format(FORMAT.LOCAL);
+            break;
+        case "today":
+            start = moment().format(FORMAT.LOCAL);
+            end = moment().endOf("day").format(FORMAT.LOCAL);
+            break;
+        default:
+            break;
+    }*/
 
     const onChangeHandler = (e) => {
         switch (e.target.name) {

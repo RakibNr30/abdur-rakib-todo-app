@@ -11,6 +11,8 @@ import DefaultToast from "../../components/DefaultToast";
 import moment from "moment";
 import TodoService from "../../services/TodoService";
 import todoStatus from "../../constants/todoStatus";
+import {DIRECTION} from "../../constants/sorts";
+import ToolbarDropdown from "../../components/ToolbarDropdown";
 
 const TodoCompleted = () => {
     const todoService = TodoService();
@@ -21,6 +23,8 @@ const TodoCompleted = () => {
     const [showUpdateToast, setShowUpdateToast] = useState(false);
     const [todos, setTodos] = useState([]);
     const [todo, setTodo] = useState({});
+    const [sortField, setSortField] = useState();
+    const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
     useEffect(() => {
         setTodos(todoService.findAllByStatus(todoStatus.completed));
@@ -38,37 +42,57 @@ const TodoCompleted = () => {
         setShowUpdateToast(true);
     }
 
+    const handleSort = (field) => {
+        const newDirection = field === sortField
+            ? (sortDirection === DIRECTION.ASC ? DIRECTION.DESC : DIRECTION.ASC)
+            : DIRECTION.ASC;
+        setSortField(field);
+        setSortDirection(newDirection);
+
+        setTodos(todoService.sort(field, newDirection, todos));
+    }
+
     return (
         <FrontLayout>
             <>
-                <div className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div
+                    className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">
                         Completed
-                        <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle} /> {`${todos.length} tasks`}</span>
+                        <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle}/> {`${todos.length} tasks`}</span>
                     </h1>
+                    <div className="btn-toolbar mb-2 mb-md-0">
+                        <ToolbarDropdown
+                            model={new Todo()}
+                            field={sortField}
+                            direction={sortDirection}
+                            handleSort={handleSort}
+                        />
+                    </div>
                 </div>
 
-                <Row>
-                    {todos.map((item, index) => {
-                        return (
-                            <Col lg={3} md={4} sm={6} className="mb-3" key={index}>
-                                <TodoItem
-                                    todo={item}
-                                    serial={index + 1}
-                                    showTimer={false}
-                                    showStatus={false}
-                                    showDate={true}
-                                    setShow={() => {
-                                        setTodo(item)
-                                        setShowUpdateFormModal(true);
-                                    }}
-                                />
-                            </Col>
-                        )
-                    })}
+                <div className="content-scrolling">
+                    <Row className="m-0">
+                        {todos.map((item, index) => {
+                            return (
+                                <Col lg={3} md={4} sm={6} className="mb-3" key={index}>
+                                    <TodoItem
+                                        todo={item}
+                                        serial={index + 1}
+                                        showTimer={false}
+                                        showStatus={false}
+                                        showDate={true}
+                                        setShow={() => {
+                                            setTodo(item)
+                                            setShowUpdateFormModal(true);
+                                        }}
+                                    />
+                                </Col>
+                            )
+                        })}
 
-                    {/*<Col lg={3} md={4} sm={6} className="mb-3">
-                        <Card className={`shadow-sm min-height-170 cursor-pointer bg-dark-subtle add-new`}
+                        {/*<Col lg={3} md={4} sm={6} className="mb-3">
+                        <Card className={`shadow-sm min-height-146 cursor-pointer bg-dark-subtle add-new`}
                               onClick={() => setShowFormModal(true)}
                         >
                             <Card.Body className="add-new-card">
@@ -78,7 +102,8 @@ const TodoCompleted = () => {
                             </Card.Body>
                         </Card>
                     </Col>*/}
-                </Row>
+                    </Row>
+                </div>
 
                 <DefaultModal
                     title="Add Todo"
@@ -88,7 +113,6 @@ const TodoCompleted = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
                         defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
@@ -104,7 +128,6 @@ const TodoCompleted = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
                         defaultTodo={todo}
                         buttonLabel="Update"
                         handle={handleUpdate}

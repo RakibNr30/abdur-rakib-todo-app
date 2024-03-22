@@ -3,47 +3,48 @@ import Form from "react-bootstrap/Form";
 import {useEffect, useState} from "react";
 import TodoService from "../services/TodoService";
 import {Col, Row} from "react-bootstrap";
-import TodoItem from "./todo/TodoItem";
 import {useNavigate} from "react-router-dom";
+import moment from "moment";
+import SearchTodoItem from "./todo/SearchTodoItem";
 
 const DefaultModal = ({show, handleClose}) => {
 
     const navigate = useNavigate();
-
     const todoService = TodoService();
-
-    useEffect(() => {
-        setTodos([]);
-    }, [show]);
 
     const [keyword, setKeyword] = useState("");
     const [todos, setTodos] = useState([]);
 
+    useEffect(() => {
+        setKeyword("");
+        setTodos([]);
+    }, [show]);
+
     const handleSearch = (e) => {
         setKeyword(e.target.value.trim());
-        setTodos(todoService.search(keyword));
+        setTodos(todoService.search(e.target.value.trim()));
     }
 
     return (
         <>
-            <Modal size="lg" show={show} onHide={handleClose}>
-                <Modal.Header>
+            <Modal size="lg" className="search-modal" show={show} onHide={handleClose}>
+                <Modal.Header className="p-0">
                     <Form.Control
                         type="text"
                         placeholder="Enter keyword to search..."
-                        autoFocus
+                        className="search"
                         onChange={handleSearch}
                     />
                 </Modal.Header>
-                <Modal.Body style={{maxHeight: "70vh", overflowY: "scroll", scrollbarWidth: "thin", padding: "0"}}>
-                    <Row>
+                <Modal.Body style={{maxHeight: "70vh", overflowY: "scroll", scrollbarWidth: "none", padding: "0"}}>
+                    <Row className="p-0 m-0">
                         {keyword.length < 1 &&
-                            <Col md={12} className="mt-2">
+                            <Col md={12} className="mt-2 p-0 m-0">
                                 <span className="pl-rem-1 pr-rem-1"><small>Quick view</small></span>
                                 <div className="modal-search-options">
                                     <div className="option" onClick={() => {
                                         handleClose(true)
-                                        navigate("/app/today")
+                                        navigate("/portal/today")
                                     }}>
                                         <svg width="24" height="24" viewBox="0 0 24 24" className="quick_find__today_icon"
                                              aria-hidden="true">
@@ -53,7 +54,7 @@ const DefaultModal = ({show, handleClose}) => {
                                                 <text
                                                     fontFamily="-apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
                                                     fontSize="9" transform="translate(4 2)" fontWeight="500">
-                                                    <tspan x="8" y="15" textAnchor="middle">21</tspan>
+                                                    <tspan x="8" y="15" textAnchor="middle">{moment().date()}</tspan>
                                                 </text>
                                             </g>
                                         </svg>
@@ -61,7 +62,7 @@ const DefaultModal = ({show, handleClose}) => {
                                     </div>
                                     <div className="option" onClick={() => {
                                         handleClose(true)
-                                        navigate("/app/upcoming")
+                                        navigate("/portal/upcoming")
                                     }}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                              viewBox="0 0 24 24">
@@ -75,20 +76,26 @@ const DefaultModal = ({show, handleClose}) => {
                             </Col>
                         }
 
-                        <Col md={12}>
-                            <div style={{padding: "1rem"}}>
-                                <Row>
-                                    {todos.map((item, index) => {
-                                        return <Col md={12} className="mb-2" key={index}>
-                                            <TodoItem
-                                                todo={item}
-                                                serial={index + 1}
-                                            />
-                                        </Col>
-                                    })}
-                                </Row>
-                            </div>
-                        </Col>
+                        {todos.length > 0 &&
+                            <Col md={12} className="p-0 m-0 mt-2">
+                                <div>
+                                    <Row className="p-0 m-0">
+                                        {todos.map((item, index) => {
+                                            return <Col md={12} className="mb-2" key={index}>
+                                                <SearchTodoItem
+                                                    todo={item}
+                                                />
+                                            </Col>
+                                        })}
+                                    </Row>
+                                </div>
+                            </Col>
+                        }
+                        {todos.length < 1 && keyword.length > 0 &&
+                            <Col md={12} className="p-4">
+                                No todo available...
+                            </Col>
+                        }
                     </Row>
                 </Modal.Body>
             </Modal>

@@ -1,8 +1,6 @@
 import FrontLayout from "../../layouts/FrontLayout";
 import {Card, Col, Row} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle, faCalendarPlus} from "@fortawesome/free-solid-svg-icons";
 import {useEffect, useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
@@ -11,6 +9,9 @@ import DefaultToast from "../../components/DefaultToast";
 import moment from "moment";
 import TodoService from "../../services/TodoService";
 import {dayLabel} from "../../utils/dateUtil";
+import AddNewButton from "../../components/AddNewButton";
+import {DIRECTION} from "../../constants/sorts";
+import ToolbarDropdown from "../../components/ToolbarDropdown";
 
 const TodoUpcoming = () => {
     const todoService = TodoService();
@@ -21,10 +22,12 @@ const TodoUpcoming = () => {
     const [showUpdateToast, setShowUpdateToast] = useState(false);
     const [upcomingTodos, setUpcomingTodos] = useState([]);
     const [todo, setTodo] = useState({});
+    const [dueDate, setDueDate] = useState({min: moment().format()});
+    const [sortField, setSortField] = useState();
+    const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
     useEffect(() => {
         setUpcomingTodos(todoService.findAllUpcoming());
-        console.log(todoService.findAllUpcoming())
     }, []);
 
     const handleAdd = (todo) => {
@@ -39,54 +42,69 @@ const TodoUpcoming = () => {
         setShowUpdateToast(true);
     }
 
+    const handleSort = (field) => {
+        const newDirection = field === sortField
+            ? (sortDirection === DIRECTION.ASC ? DIRECTION.DESC : DIRECTION.ASC)
+            : DIRECTION.ASC;
+        setSortField(field);
+        setSortDirection(newDirection);
+
+        setUpcomingTodos(todoService.findAllUpcoming(field, newDirection));
+    }
+
     return (
         <FrontLayout>
             <>
-                <div className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div
+                    className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">
                         Upcoming
                     </h1>
+                    <div className="btn-toolbar mb-2 mb-md-0">
+                        <ToolbarDropdown
+                            model={new Todo()}
+                            field={sortField}
+                            direction={sortDirection}
+                            handleSort={handleSort}
+                        />
+                    </div>
                 </div>
 
-                <Row>
+                <div className="list-scrolling">
                     {upcomingTodos.map(({date, todos}, dateIndex) => {
                         return (
-                            <Col lg={3} md={4} sm={6} className="mb-3" key={dateIndex}>
-                                <Row>
-                                    <Col md={12} className="mb-3">
-                                        <h5>{moment(date).format("DD MMM")} - {dayLabel(date)} ({todos.length})</h5>
+                            <div className="list-scrolling-items min-width-320 mb-3" key={dateIndex}>
+                                <Row className="m-0 p-0">
+                                <Col md={12} className="mb-3">
+                                        <h5 className="date-title">{moment(date).format("DD MMM")} - {dayLabel(date)} ({todos.length})</h5>
                                     </Col>
-                                    {todos.map((item, index) => {
-                                        return (
-                                            <Col md={12} className="mb-3">
-                                                <TodoItem
-                                                    todo={item}
-                                                    serial={index + 1}
-                                                    setShow={() => {
-                                                        setTodo(item)
-                                                        setShowUpdateFormModal(true);
-                                                    }}
-                                                />
-                                            </Col>
-                                        )
-                                    })}
+                                    <Col md={12}>
+                                        {todos.map((item, index) => {
+                                            return (
+                                                <div className="list-items mb-3"  key={index}>
+                                                    <TodoItem
+                                                        todo={item}
+                                                        serial={index + 1}
+                                                        setShow={() => {
+                                                            setTodo(item)
+                                                            setShowUpdateFormModal(true);
+                                                        }}
+                                                    />
+                                                </div>
+                                            )
+                                        })}
+                                    </Col>
+                                    <Col md={12} className="mb-3">
+                                        <AddNewButton handleClick={() => {
+                                            setDueDate({min: date, max: date})
+                                            setShowFormModal(true)
+                                        }} />
+                                    </Col>
                                 </Row>
-                            </Col>
+                            </div>
                         )
                     })}
-
-                    {/*<Col md={6} className="mb-3">
-                        <Card className={`shadow-sm min-height-170 cursor-pointer bg-dark-subtle add-new`}
-                              onClick={() => setShowFormModal(true)}
-                        >
-                            <Card.Body className="add-new-card">
-                                <div className={`font-size-72`}>
-                                    <FontAwesomeIcon icon={faCalendarPlus} className="text-secondary"></FontAwesomeIcon>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>*/}
-                </Row>
+                </div>
 
                 <DefaultModal
                     title="Add Todo"
@@ -96,7 +114,7 @@ const TodoUpcoming = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
+                        dueDate={dueDate}
                         defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
@@ -112,7 +130,7 @@ const TodoUpcoming = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
+                        dueDate={dueDate}
                         defaultTodo={todo}
                         buttonLabel="Update"
                         handle={handleUpdate}

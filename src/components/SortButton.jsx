@@ -7,18 +7,27 @@ const SortButton = ({onField, field, direction, handleSort}) => {
     const isAscending = onField === field && direction === DIRECTION.ASC;
     const isDescending = onField === field && direction === DIRECTION.DESC;
 
-    return (
-        <span className="ms-2" onClick={() => handleSort(field)}>
-            <FontAwesomeIcon
-                icon={faArrowUp}
-                className={`cursor-pointer ${isAscending ? '' : 'text-secondary'}`}
-            />
-            <FontAwesomeIcon
-                icon={faArrowDown}
-                className={`cursor-pointer ${isDescending ? '' : 'text-secondary'}`}
-            />
-        </span>
-    );
+    return (<>
+            {handleSort ? <span className="ms-2" onClick={() => handleSort(field)}>
+                    <FontAwesomeIcon
+                        icon={faArrowUp}
+                        className={`cursor-pointer ${isAscending ? '' : 'text-secondary'}`}
+                    />
+                    <FontAwesomeIcon
+                        icon={faArrowDown}
+                        className={`cursor-pointer ${isDescending ? '' : 'text-secondary'}`}
+                    />
+                </span> : <span className="ms-2">
+                <FontAwesomeIcon
+                    icon={faArrowUp}
+                    className={`cursor-pointer ${isAscending ? '' : 'text-secondary'}`}
+                />
+                <FontAwesomeIcon
+                    icon={faArrowDown}
+                    className={`cursor-pointer ${isDescending ? '' : 'text-secondary'}`}
+                />
+        </span>}
+        </>);
 };
 
 export default SortButton;

@@ -8,11 +8,13 @@ const TodoItem = ({todo, serial, showStatus = true, showPriority = true, showTim
     return (
         <>
             <Card
-                className={`shadow-sm border-${TodoStatus.getColor(parseInt(todo.status))}-left-5 min-height-170 cursor-pointer`}
+                className={`shadow-sm border-${TodoStatus.getColor(parseInt(todo.status))}-left-5 item-card min-height-146 cursor-pointer`}
                 onClick={setShow}
             >
                 <Card.Body>
-                    <div className={`mb-3`}>Todo #{serial}</div>
+                    {serial &&
+                        <div className={`mb-3`}>Todo #{serial}</div>
+                    }
                     <Card.Title className="item-title">{todo.title.length > 50 ? (todo.title.substring(0, 50) + "...") : todo.title}</Card.Title>
                     <Card.Text>
                         {todo.details.length > 50 ? (todo.details.substring(0, 50) + "...") : todo.details}

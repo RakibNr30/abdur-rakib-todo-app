@@ -32,19 +32,19 @@ export const routes = createBrowserRouter([
         element: <TodoView />
     },
     {
-        path: "/app/today",
+        path: "/portal/today",
         element: <TodoToday />
     },
     {
-        path: "/app/upcoming",
+        path: "/portal/upcoming",
         element: <TodoUpcoming />
     },
     {
-        path: "/app/completed",
+        path: "/portal/completed",
         element: <TodoCompleted />
     },
     {
-        path: "/app/expired",
+        path: "/portal/expired",
         element: <TodoExpired />
     }
 ]);

@@ -41,7 +41,7 @@ const TodoService = () => {
         });
     }
 
-    const findAllUpcoming = () => {
+    const findAllUpcoming = (sortField, sortDirection) => {
         const now = moment();
         const groupedTodos = getAllTodoFromStore().reduce((acc, item) => {
             const endTimeDate = moment(item.end_time).startOf('day');
@@ -52,11 +52,29 @@ const TodoService = () => {
             return acc;
         }, {});
 
-        return Object.entries(groupedTodos).map(([date, todos]) => ({
+        const next7Days = Array.from({ length: 7 }, (_, i) => moment().add(i, 'days').startOf('day'));
+
+        next7Days.forEach(date => {
+            if (!groupedTodos[date]) {
+                groupedTodos[date] = [];
+            }
+        });
+
+        const sortedTodos = Object.entries(groupedTodos).map(([date, todos]) => ({
             date,
             todos
         })).sort((a, b) => moment(a.date).diff(moment(b.date)));
+
+        if (sortField && sortDirection) {
+            return sortedTodos.map(group => ({
+                ...group,
+                todos: sort(sortField, sortDirection, group.todos)
+            }));
+        }
+
+        return sortedTodos;
     }
+
 
     const save = (todo = {}) => {
         addTodoToStore(todo);
@@ -78,8 +96,10 @@ const TodoService = () => {
         deleteTodoFromStore(id);
     }
 
-    const search = (query = "") => {
-        return getAllTodoFromStore().filter((todo) =>
+    const search = (query = "", todos = null) => {
+        const items = todos === null ? getAllTodoFromStore() : todos;
+
+        return items.filter((todo) =>
             Object.entries(todo).some(([key, value]) => {
                     if (typeof value === "string") {
                         return value.toLowerCase().includes(query.toLowerCase());
@@ -93,8 +113,10 @@ const TodoService = () => {
         );
     };
 
-    const sort = (field, direction) => {
-        return getAllTodoFromStore().sort((a, b) => {
+    const sort = (field, direction, todos = null) => {
+        const items = todos === null ? getAllTodoFromStore() : todos;
+
+        return items.sort((a, b) => {
             const aFieldValue = a[field];
             const bFieldValue = b[field];
             if (aFieldValue < bFieldValue) return direction === 'asc' ? -1 : 1;

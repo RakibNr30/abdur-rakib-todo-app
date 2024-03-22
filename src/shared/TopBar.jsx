@@ -1,46 +1,22 @@
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
 import {Link} from "react-router-dom";
-import useStorageStore from "../stores/storageStore";
-import {useEffect, useState} from "react";
-import * as storages from "../constants/storages";
 
-const TopBar = () => {
-    const {setStorage, getStorage} = useStorageStore();
-    const [isChecked, setIsChecked] = useState(false);
-
-    useEffect(() => {
-        setIsChecked(getStorage() === storages.TYPE.API);
-    }, [getStorage]);
-
-    const handleSwitchChange = (checked) => {
-        setIsChecked(checked);
-        setStorage(checked ? storages.TYPE.API : storages.TYPE.LOCAL);
-    };
+const TopBar = ({toggleCollapse}) => {
 
     return (
-        <header className="navbar navbar-light sticky-top bg-light flex-md-nowrap p-0 shadow">
-            <Link className="navbar-brand col-md-3 col-lg-2 me-0 px-3" to="/">TuDuDu</Link>
-            <button className="navbar-toggler position-absolute d-md-none collapsed" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <Nav className="me-auto px-2" style={{maxHeight: '100px'}} navbarScroll>
-                <Nav.Link as={Link} to="/about">About</Nav.Link>
-                <Nav.Link as={Link} to="/todo">Todo</Nav.Link>
-            </Nav>
-
-            <Form className="d-flex px-md-4 px-2">
-                <Form.Check
-                    type="switch"
-                    id="switch"
-                    label="Is API Enabled?"
-                    checked={isChecked}
-                    onChange={(e) => handleSwitchChange(e.target.checked)}
-                />
-            </Form>
-        </header>
+        <>
+            <header className="top-bar">
+                <span className="hamburger" onClick={toggleCollapse}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path
+                        fill="currentColor" fillRule="evenodd"
+                        d="M19 4.001H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-12a2 2 0 0 0-2-2Zm-15 2a1 1 0 0 1 1-1h4v14H5a1 1 0 0 1-1-1v-12Zm6 13h9a1 1 0 0 0 1-1v-12a1 1 0 0 0-1-1h-9v14Z"
+                        clipRule="evenodd"></path>
+                    </svg>
+                </span>
+                <Link className="item" to="/todo">
+                    Datatable
+                </Link>
+            </header>
+        </>
     );
 }
 

@@ -1,5 +1,5 @@
 import FrontLayout from "../../layouts/FrontLayout";
-import {Card, Col, Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheckCircle, faCalendarPlus} from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,9 @@ import DefaultToast from "../../components/DefaultToast";
 import moment from "moment";
 import TodoService from "../../services/TodoService";
 import {dayLabel} from "../../utils/dateUtil";
+import AddNewButton from "../../components/AddNewButton";
+import {DIRECTION} from "../../constants/sorts";
+import ToolbarDropdown from "../../components/ToolbarDropdown";
 
 const TodoToday = () => {
     const todoService = TodoService();
@@ -22,6 +25,8 @@ const TodoToday = () => {
     const [todo, setTodo] = useState({});
     const [todos, setTodos] = useState([]);
     const [overdueTodos, setOverdueTodos] = useState([]);
+    const [sortField, setSortField] = useState();
+    const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
     useEffect(() => {
         setTodos(todoService.findAllByDate(moment(), false));
@@ -42,28 +47,49 @@ const TodoToday = () => {
         setShowUpdateToast(true);
     }
 
+    const handleSort = (field) => {
+        const newDirection = field === sortField
+            ? (sortDirection === DIRECTION.ASC ? DIRECTION.DESC : DIRECTION.ASC)
+            : DIRECTION.ASC;
+        setSortField(field);
+        setSortDirection(newDirection);
+
+        setTodos(todoService.sort(field, newDirection, todos));
+        setOverdueTodos(todoService.sort(field, newDirection, overdueTodos));
+    }
+
     return (
         <FrontLayout>
             <>
-                <div className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div
+                    className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">
                         Today
-                        <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle} /> {`${todos.length + overdueTodos.length} tasks`}</span>
+                        <span className="d-block mt-1"><FontAwesomeIcon
+                            icon={faCheckCircle}/> {`${todos.length + overdueTodos.length} tasks`}</span>
                     </h1>
+                    <div className="btn-toolbar mb-2 mb-md-0">
+                        <ToolbarDropdown
+                            model={new Todo()}
+                            field={sortField}
+                            direction={sortDirection}
+                            handleSort={handleSort}
+                        />
+                    </div>
                 </div>
 
-                <Row>
+                <div className="list-scrolling">
                     {overdueTodos.length > 0 &&
-                        <Col className="col-6">
-                            <Row>
+                        <div className="list-scrolling-items width-320 mb-3">
+                            <Row className="m-0 p-0">
                                 <Col md={12} className="mb-3">
-                                    <h5>Overdue ({overdueTodos.length})</h5>
+                                    <h5 className="date-title">Overdue ({overdueTodos.length})</h5>
                                 </Col>
                                 <Col md={12}>
-                                    <Row>
+                                    <div className="list-items">
                                         {overdueTodos.map((item, index) => {
                                             return (
-                                                <Col md={6} className="mb-3" key={index}>
+                                                <div className="mb-3" key={index}>
                                                     <TodoItem
                                                         todo={item}
                                                         serial={index + 1}
@@ -72,24 +98,24 @@ const TodoToday = () => {
                                                             setShowUpdateFormModal(true);
                                                         }}
                                                     />
-                                                </Col>
+                                                </div>
                                             )
                                         })}
-                                    </Row>
+                                    </div>
                                 </Col>
                             </Row>
-                        </Col>
+                        </div>
                     }
-                    <Col className="col-6">
-                        <Row>
+                    <div className="list-scrolling-items width-320 mb-3">
+                        <Row className="m-0 p-0">
                             <Col md={12} className="mb-3">
-                                <h5>{moment().format("DD MMM")} - {dayLabel(moment())} ({todos.length})</h5>
+                                <h5 className="date-title">{moment().format("DD MMM")} - {dayLabel(moment())} ({todos.length})</h5>
                             </Col>
                             <Col md={12}>
-                                <Row>
+                                <div className="list-items">
                                     {todos.map((item, index) => {
                                         return (
-                                            <Col md={6} className="mb-3" key={index}>
+                                            <div className="mb-3" key={index}>
                                                 <TodoItem
                                                     todo={item}
                                                     serial={index + 1}
@@ -98,25 +124,19 @@ const TodoToday = () => {
                                                         setShowUpdateFormModal(true);
                                                     }}
                                                 />
-                                            </Col>
+                                            </div>
                                         )
                                     })}
-                                    <Col md={6} className="mb-3">
-                                        <Card className={`shadow-sm min-height-170 cursor-pointer bg-dark-subtle add-new`}
-                                              onClick={() => setShowFormModal(true)}
-                                        >
-                                            <Card.Body className="add-new-card">
-                                                <div className={`font-size-72`}>
-                                                    <FontAwesomeIcon icon={faCalendarPlus} className="text-secondary"></FontAwesomeIcon>
-                                                </div>
-                                            </Card.Body>
-                                        </Card>
+                                    <Col md={12} className="mb-3">
+                                        <AddNewButton handleClick={() => {
+                                            setShowFormModal(true)
+                                        }} />
                                     </Col>
-                                </Row>
+                                </div>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
 
                 <DefaultModal
                     title="Add Todo"
@@ -126,7 +146,10 @@ const TodoToday = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
+                        dueDate={{
+                            min: moment().format(),
+                            max: moment().format(),
+                        }}
                         defaultTodo={new Todo}
                         buttonLabel="Add"
                         setShowFormModal={setShowFormModal}
@@ -142,7 +165,10 @@ const TodoToday = () => {
                     }}>
 
                     <TodoForm
-                        todoFor="today"
+                        dueDate={{
+                            min: moment().format(),
+                            max: moment().format(),
+                        }}
                         defaultTodo={todo}
                         buttonLabel="Update"
                         handle={handleUpdate}

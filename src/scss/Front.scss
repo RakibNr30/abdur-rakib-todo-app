@@ -18,6 +18,67 @@
   --bs-dark-light: rgba(33, 37, 41, 0.3);
 }
 
+.tudududu-app {
+  display: flex;
+}
+
+main {
+  flex: 1;
+  transition: width 0.3ms;
+  overflow-y: auto;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  header.top-bar {
+    display: flex;
+    column-gap: 2rem;
+    align-items: center;
+    padding: 1rem 0;
+
+    span.hamburger {
+      cursor: pointer;
+    }
+    span.hamburger:hover {
+      color: #dc4c3e;
+    }
+
+    .item {
+      text-decoration: none;
+      color: #fff;
+      background: #dc4c3e;
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid #dc4c3e;
+      transition: 0.3s;
+    }
+    .item:hover {
+      background: transparent;
+      color: #dc4c3e;
+    }
+  }
+}
+
+.btn-toolbar .dropdown-toggle::after {
+  content: unset;
+}
+.btn-toolbar .sort-by-dropdown {
+  width: 300px;
+  padding: 0;
+}
+.btn-toolbar .sort-by-list {
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  column-gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn-toolbar .sort-by-list:hover {
+  background: #000;
+  color: white;
+}
+
 .bg-primary-light {
   background-color: var(--bs-primary-light);
 }
@@ -54,15 +115,41 @@
   text-align: justify !important;
 }
 
+.card.item-card:hover {
+  background-color: #f3efec;
+}
+
 .card.add-new {
   background-color: white !important;
 }
 
+.card.add-new:hover {
+  background-color: #f3efec !important;
+}
 .add-new-card {
   display: flex;
   flex: auto;
   align-items: center;
   align-self: center;
+}
+.add-new-card-2 {
+  display: flex;
+  column-gap: 0.5rem;
+  flex: auto;
+  align-items: center;
+  align-self: center;
+}
+.add-new-card-2 .icon {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.add-new-card-2:hover .icon {
+  color: #fff;
+  border-radius: 50%;
+  background-color: #dc4c3e;
+}
+.add-new-card-2:hover .btn-text {
+  color: #dc4c3e;
 }
 
 .item-title.h5 {
@@ -96,6 +183,7 @@ table {
 
 .modal-search-options {
   margin-bottom: 1rem;
+
   .option {
     text-decoration: none;
     color: inherit;
@@ -112,10 +200,70 @@ table {
     padding: 0 1rem;
     border-left: transparent 2px solid;
   }
+
   .option:hover {
     background-color: #e5e5e5;
     border-left: #dc4c3e 2px solid;
   }
+}
+
+input[type="text"].search {
+  padding: 0.75rem 1rem;
+  border: none;
+  outline: none;
+  border-radius: var(--bs-border-radius);
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.search-modal .form-control:focus {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.pl-rem-1 {
+  padding-left: 1rem;
+}
+
+.pr-rem-1 {
+  padding-right: 1rem;
+}
+
+.ml-rem-1 {
+  margin-left: 1rem;
+}
+
+.mr-rem-1 {
+  margin-right: 1rem;
+}
+
+.list-scrolling {
+  overflow-x: auto;
+  display: flex;
+  column-gap: 1.5rem;
+  height: 100vh;
+  scrollbar-width: thin;
+  .list-scrolling-items {
+    white-space: nowrap;
+    .list-items {
+      max-height: 100vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+.content-scrolling {
+  overflow-y: auto;
+  height: 100vh;
+  scrollbar-width: thin;
+}
+
+.date-title {
+  font-size: 14px;
+  font-weight: 800;
 }
 
 $colors: (
@@ -128,18 +276,6 @@ $colors: (
         light: rgba(248, 249, 250, 1),
         dark: rgba(33, 37, 41, 1)
 );
-.pl-rem-1 {
-  padding-left: 1rem;
-}
-.pr-rem-1 {
-  padding-right: 1rem;
-}
-.ml-rem-1 {
-  margin-left: 1rem;
-}
-.mr-rem-1 {
-  margin-right: 1rem;
-}
 
 @each $name, $color in $colors {
   @for $i from 1 through 10 {
@@ -159,8 +295,19 @@ $colors: (
 }
 
 @for $i from 10 through 1200 {
+  .width-#{$i} {
+    width: #{$i}px;
+  }
+}
+
+@for $i from 10 through 1200 {
   .min-height-#{$i} {
     min-height: #{$i}px;
+  }
+}
+@for $i from 10 through 1200 {
+  .min-width-#{$i} {
+    min-width: #{$i}px;
   }
 }
 
@@ -171,7 +318,7 @@ $colors: (
 }
 
 @media (max-width: 768px) {
-  .search {
+  .dt-search {
     margin-top: 0.5rem !important;
   }
 }
