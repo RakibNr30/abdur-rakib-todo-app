@@ -90,18 +90,9 @@ const TodoCompleted = () => {
                                 </Col>
                             )
                         })}
-
-                        {/*<Col lg={3} md={4} sm={6} className="mb-3">
-                        <Card className={`shadow-sm min-height-146 cursor-pointer bg-dark-subtle add-new`}
-                              onClick={() => setShowFormModal(true)}
-                        >
-                            <Card.Body className="add-new-card">
-                                <div className={`font-size-72`}>
-                                    <FontAwesomeIcon icon={faCalendarPlus} className="text-secondary"></FontAwesomeIcon>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    </Col>*/}
+                        {todos.length < 1 &&
+                            <Col md={12} className="p-0">Not completed todo found.</Col>
+                        }
                     </Row>
                 </div>
 

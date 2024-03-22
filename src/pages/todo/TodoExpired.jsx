@@ -37,7 +37,7 @@ const TodoExpired = () => {
                 <div
                     className="breadcrumb d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 className="h2">
-                        Today
+                        Expired
                         <span className="d-block mt-1"><FontAwesomeIcon icon={faCheckCircle}/> {`${todos.length} tasks`}</span>
                     </h1>
                     <div className="btn-toolbar mb-2 mb-md-0">
@@ -64,6 +64,9 @@ const TodoExpired = () => {
                                 </Col>
                             )
                         })}
+                        {todos.length < 1 &&
+                            <Col md={12} className="p-0">Not expired todo found.</Col>
+                        }
                     </Row>
                 </div>
             </>
