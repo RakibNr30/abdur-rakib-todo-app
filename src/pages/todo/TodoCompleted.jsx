@@ -8,7 +8,6 @@ import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
 import Todo from "../../models/Todo";
 import DefaultToast from "../../components/DefaultToast";
-import moment from "moment";
 import TodoService from "../../services/TodoService";
 import todoStatus from "../../constants/todoStatus";
 import {DIRECTION} from "../../constants/sorts";
@@ -17,9 +16,7 @@ import ToolbarDropdown from "../../components/ToolbarDropdown";
 const TodoCompleted = () => {
     const todoService = TodoService();
 
-    const [showFormModal, setShowFormModal] = useState(false);
     const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
-    const [showToast, setShowToast] = useState(false);
     const [showUpdateToast, setShowUpdateToast] = useState(false);
     const [todos, setTodos] = useState([]);
     const [todo, setTodo] = useState({});

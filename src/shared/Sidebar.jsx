@@ -2,18 +2,19 @@ import '../scss/Sidebar.scss'
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import moment from "moment";
 import {useState} from "react";
-import TodoService from "../services/TodoService";
 import TodoForm from "../pages/todo/TodoForm";
 import Todo from "../models/Todo";
 import DefaultModal from "../components/DefaultModal";
 import DefaultToast from "../components/DefaultToast";
 import SearchModal from "../components/SearchModal";
 import useKeyboardShortcut from "../hooks/useKeyboardShortcut";
+import {useGlobalContext} from "../contexts/GlobalContext";
 
 const Sidebar = ({isCollapsed}) => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
-    const todoService = TodoService();
+
+    const {addTodo} = useGlobalContext();
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [showSearchModal, setShowSearchModal] = useState(false);
@@ -32,7 +33,7 @@ const Sidebar = ({isCollapsed}) => {
     useKeyboardShortcut(shortcuts);
 
     const handleAdd = (todo) => {
-        todoService.save(todo);
+        addTodo(todo);
         setShowToast(true);
     }
 

@@ -28,7 +28,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     return (
-        <GlobalContext.Provider value={{todos, overdueTodos, addTodo, updateTodo}}>
+        <GlobalContext.Provider value={{todos, overdueTodos, setTodos, setOverdueTodos, addTodo, updateTodo}}>
             {children}
         </GlobalContext.Provider>
     )

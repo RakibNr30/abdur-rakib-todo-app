@@ -2,8 +2,8 @@ import FrontLayout from "../../layouts/FrontLayout";
 import {Col, Row} from "react-bootstrap";
 import TodoItem from "../../components/todo/TodoItem";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle, faCalendarPlus} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
+import {faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
 import DefaultModal from "../../components/DefaultModal";
 import TodoForm from "../todo/TodoForm";
 import Todo from "../../models/Todo";
@@ -14,36 +14,27 @@ import {dayLabel} from "../../utils/dateUtil";
 import AddNewButton from "../../components/AddNewButton";
 import {DIRECTION} from "../../constants/sorts";
 import ToolbarDropdown from "../../components/ToolbarDropdown";
+import {useGlobalContext} from "../../contexts/GlobalContext";
 
 const TodoToday = () => {
     const todoService = TodoService();
+    const {todos, setTodos, overdueTodos, setOverdueTodos, addTodo, updateTodo} = useGlobalContext();
 
     const [showFormModal, setShowFormModal] = useState(false);
     const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [showUpdateToast, setShowUpdateToast] = useState(false);
     const [todo, setTodo] = useState({});
-    const [todos, setTodos] = useState([]);
-    const [overdueTodos, setOverdueTodos] = useState([]);
     const [sortField, setSortField] = useState();
     const [sortDirection, setSortDirection] = useState(DIRECTION.ASC);
 
-    useEffect(() => {
-        setTodos(todoService.findAllByDate(moment(), false));
-        setOverdueTodos(todoService.findAllOverdueByDate(moment()));
-    }, []);
-
     const handleAdd = (todo) => {
-        todoService.save(todo);
-        setTodos(todoService.findAllByDate(moment(), false));
-        setOverdueTodos(todoService.findAllOverdueByDate(moment()));
+        addTodo(todo);
         setShowToast(true);
     }
 
     const handleUpdate = (todo) => {
-        todoService.update(todo);
-        setTodos(todoService.findAllByDate(moment(), false));
-        setOverdueTodos(todoService.findAllOverdueByDate(moment()));
+        updateTodo(todo);
         setShowUpdateToast(true);
     }
 
