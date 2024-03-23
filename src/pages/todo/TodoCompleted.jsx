@@ -30,15 +30,9 @@ const TodoCompleted = () => {
         setTodos(todoService.findAllByStatus(todoStatus.completed));
     }, []);
 
-    const handleAdd = (todo) => {
-        todoService.save(todo);
-        setTodos(todoService.findAllByDate(moment()))
-        setShowToast(true);
-    }
-
     const handleUpdate = (todo) => {
         todoService.update(todo);
-        setTodos(todoService.findAllByDate(moment()))
+        setTodos(todoService.findAllByStatus(todoStatus.completed));
         setShowUpdateToast(true);
     }
 
@@ -97,21 +91,6 @@ const TodoCompleted = () => {
                 </div>
 
                 <DefaultModal
-                    title="Add Todo"
-                    show={showFormModal}
-                    handleClose={() => {
-                        setShowFormModal(false)
-                    }}>
-
-                    <TodoForm
-                        defaultTodo={new Todo}
-                        buttonLabel="Add"
-                        setShowFormModal={setShowFormModal}
-                        handle={handleAdd}
-                    />
-                </DefaultModal>
-
-                <DefaultModal
                     title="Edit Todo"
                     show={showUpdateFormModal}
                     handleClose={() => {
@@ -125,14 +104,6 @@ const TodoCompleted = () => {
                         isUpdate={true}
                     />
                 </DefaultModal>
-
-                <DefaultToast
-                    show={showToast}
-                    setShow={setShowToast}
-                    variant={"success"}
-                    title="Success!"
-                    body="Todo added successfully."
-                />
 
                 <DefaultToast
                     show={showUpdateToast}
